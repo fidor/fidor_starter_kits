@@ -2,13 +2,22 @@ require 'spec_helper'
 
 describe FidorStarterKits do
 
-  context 'path' do
+  describe '.exists?' do
+    it 'is true' do
+      expect( FidorStarterKits.exists?('sinatra_plain') ).to be
+    end
+    it 'is false' do
+      expect( FidorStarterKits.exists?('sinatra_plain') ).to be
+    end
+  end
+
+  describe '.path' do
     it 'exists' do
       expect( File.exists?( FidorStarterKits.path) ).to be
     end
   end
 
-  context 'build' do
+  describe '.build' do
 
     it 'creates zip file' do
       res = FidorStarterKits.build('sinatra_plain', '123', '12345', 'localhost')
