@@ -1,10 +1,10 @@
 = Plain Login - Example
 
-A single view handling the triple jump.
+A single view showing how to get an access token
 
 == Usage
 
-This ues bundler to install the required gems:
+This uses bundler to install the required gems:
 
   cd sinatra_plain
   bundle install

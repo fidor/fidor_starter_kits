@@ -1,6 +1,3 @@
-/.bundle
-/db/*.sqlite3
-/db/*.sqlite3-journal
 *.gem
 *.rbc
 .bundle
@@ -15,17 +12,11 @@ lib/bundler/man
 pkg
 rdoc
 spec/reports
-test/tmp
-test/version_tmp
 tmp
-/log/*.log
-/tmp
+*.log
 database.yml
 settings.yml
 secrets.yml
-/vendor/assets/bower_components/*
-/public/assets/*.*
 /coverage/*
 .ruby-version
 .ruby-gemset
-Gemfile.lock
