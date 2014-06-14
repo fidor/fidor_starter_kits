@@ -26,13 +26,16 @@ Or install it yourself as:
 
 ## Usage
 
-Create an app with credentials
+Create a zipped app with credentials and the fidor url:
+```ruby
 
-  # FidorStarterKits.build(example_name, client_id, client_secret, fidor_url)
-  zip_file_path = FidorStarterKits.build('sinatra_plain', 'your-client-id', 'your-client-secret', 'http://localhost:3002')
-  # => /tmp/sinatra_plain-xyz/sinatra_plain.zip
-  # => mv / cp / download is up to you babee
-  
+# FidorStarterKits.build(example_name, client_id, client_secret, fidor_url)
+    
+zip_file_path = FidorStarterKits.build('sinatra_plain',
+                                       'your-client-id','your-client-secret', 'http://localhost:3002')
+# => /tmp/sinatra_plain-xyz/sinatra_plain.zip
+# => mv / cp / download is up to you babee
+```
 
 ## Contributing
 
