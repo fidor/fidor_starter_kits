@@ -19,10 +19,10 @@ module FidorStarterKits
     # @param [String] app_name  directory name of a starter kit
     # @param [String] client_id
     # @param [String] client_secret
+    # @param [String] app_url
     # @param [String] fidor_url
     # @return [String] path to zipped example im /tmp folder
-    def build(app_name, client_id, client_secret, fidor_url)
-
+    def build(app_name, client_id, client_secret, app_url, fidor_url)
       # move example to a save location
       example_src_path = File.join(path, app_name)
       tmp_src_dir = Dir.mktmpdir(app_name)
@@ -34,6 +34,7 @@ module FidorStarterKits
         content = File.read(example_file)
         changed_content = content.gsub(/<CLIENT-ID>/, client_id)
                                   .gsub(/<CLIENT-SECRET>/, client_secret)
+                                  .gsub(/<APP-URL>/, app_url)
                                   .gsub(/<FIDOR-URL>/, fidor_url)
         File.write(example_file, changed_content)
       end

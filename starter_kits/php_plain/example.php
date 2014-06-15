@@ -1,6 +1,6 @@
 <?php
 
-  $app_url = ""http://localhost:8000/example.php";
+  $app_url = "<APP-URL>"; # default http://localhost:8000/example.php
   $app_id = "<CLIENT-ID>";
   $app_secret = "<CLIENT-SECRET>";
   $fidor_url = "<FIDOR-URL>";

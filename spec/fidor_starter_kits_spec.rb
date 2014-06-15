@@ -25,11 +25,12 @@ describe FidorStarterKits do
     end
 
     it 'replaces placeholders in example.rb' do
-      res = FidorStarterKits.build('sinatra_plain', 'my-client-id', 'my-client-secret', 'fidor-url')
+      res = FidorStarterKits.build('sinatra_plain', 'my-client-id', 'my-client-secret','my-app-url' ,'fidor-url')
       content = File.read(File.join(File.dirname(res), 'example.rb'))
       expect( content ).to include 'my-client-id'
       expect( content ).to include 'my-client-secret'
       expect( content ).to include 'fidor-url'
+      expect( content ).to include 'my-app-url'
     end
   end
 end
