@@ -25,10 +25,16 @@ get '/' do
                                         'client_secret'=>@client_secret)
   resp = ActiveSupport::JSON.decode(res.body)
 
-  "You now have an access token: #{resp.inspect}"
-
-  # GET info about current user
-  # usr_url = "#{@fidor_url}/api/users/current?access_token=#{resp['access_token']}"
-  # u =  Net::HTTP.get(usr_url)
-  # usr = ActiveSupport::JSON.decode(u.body_str)
+  # GET current user
+  usr_url = "#{@fidor_url}/api/users/current?access_token=#{resp['access_token']}"
+  user = ActiveSupport::JSON.decode( Net::HTTP.get URI(usr_url) )
+  acnt_url = "#{@fidor_url}/api/accounts?access_token=#{resp['access_token']}"
+  # account_resp =  Net::HTTP.get URI(acnt_url)
+  # accounts = ActiveSupport::JSON.decode(account_resp)
+  "<h2>Hello #{user['email']}</h2>
+   <i>May i present the access token response:</i>
+   <blockquote>#{resp.inspect}</blockquote>
+   <p>Now use the access token like this <br>
+      <a href='#{acnt_url}'>#{acnt_url}</a></p>
+   "
 end
