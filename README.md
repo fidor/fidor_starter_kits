@@ -27,15 +27,37 @@ Or install it yourself as:
 ## Usage
 
 Create a zipped app with credentials and the fidor url:
+
 ```ruby
 
-# FidorStarterKits.build(example_name, client_id, client_secret, fidor_url)
-    
-zip_file_path = FidorStarterKits.build('sinatra_plain',
-                                       'your-client-id','your-client-secret', 'http://localhost:3002')
-# => /tmp/sinatra_plain-xyz/sinatra_plain.zip
-# => mv / cp / download is up to you babee
+    opts = {
+              app_name: 'sinatra_plain',
+              client_id: 'my-client-id',
+              client_secret: 'my-client-secret',
+              app_url: 'http://my-app-url:3002',
+              fidor_oauth_url: 'https://fidor-oauth-url.de/oauth',
+              fidor_api_url: 'https://fidor-api-url.de/api_sandbox'
+            }
+        
+    zip_file_path = FidorStarterKits.build(opts)
+    # => /tmp/sinatra_plain-xyz/sinatra_plain.zip
+    # => mv / cp / download is up to you babee
+
 ```
+## Build your own starter kit
+
+As a quickstart for new developers we zip and download the examples in our 
+application manager. Before the following placeholders inside in your main 
+example.xy file are substituted with the according values from the app:
+
+    <APP_URL>                   # default http://localhost:8000/example.php
+    <CLIENT_ID>
+    <CLIENT_SECRET>
+    <FIDOR_OAUTH_URL>           # e.g https://fidor.com/oauth
+    <FIDOR_API_URL>
+
+So just add those to example.[rb, php, ..] and see existing examples and specs 
+for a reference.
 
 ## Contributing
 

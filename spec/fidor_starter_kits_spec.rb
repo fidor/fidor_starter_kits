@@ -20,17 +20,32 @@ describe FidorStarterKits do
   describe '.build' do
 
     it 'creates zip file' do
-      res = FidorStarterKits.build('sinatra_plain', '123', '12345', 'localhost')
+      opts = {
+        app_name: 'sinatra_plain',
+        client_id: '123',
+        client_secret: '12345',
+        app_url: 'localhost'
+      }
+      res = FidorStarterKits.build(opts)
       expect( File.exists?(res) ).to be
     end
 
     it 'replaces placeholders in example.rb' do
-      res = FidorStarterKits.build('sinatra_plain', 'my-client-id', 'my-client-secret','my-app-url' ,'fidor-url')
+      opts = {
+        app_name: 'sinatra_plain',
+        client_id: 'my-client-id',
+        client_secret: 'my-client-secret',
+        app_url: 'my-app-url',
+        fidor_oauth_url: 'fidor-oauth-url',
+        fidor_api_url: 'fidor-api-url'
+      }
+      res = FidorStarterKits.build(opts)
       content = File.read(File.join(File.dirname(res), 'example.rb'))
       expect( content ).to include 'my-client-id'
       expect( content ).to include 'my-client-secret'
-      expect( content ).to include 'fidor-url'
       expect( content ).to include 'my-app-url'
+      expect( content ).to include 'fidor-api-url'
+      expect( content ).to include 'fidor-oauth-url'
     end
   end
 end
