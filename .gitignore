@@ -21,3 +21,4 @@ secrets.yml
 .ruby-version
 .ruby-gemset
 *.swp
+node_modules
