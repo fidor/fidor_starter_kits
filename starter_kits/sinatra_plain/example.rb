@@ -5,11 +5,11 @@ require 'net/http'
 
 get '/' do
   # settings
-  @app_url         = '<APP_URL>'          # default for local installs: http://localhost:4567
-  @client_id       = '<CLIENT_ID>'
-  @client_secret   = '<CLIENT_SECRET>'
-  @fidor_oauth_url = '<FIDOR_OAUTH_URL>'  # e.g https://fidor.com/oauth
-  @fidor_api_url   = '<FIDOR_API_URL>'    # e.g https://fidor.com/api_sandbox, https://fidor.com/api
+  @app_url         = 'http://localhost:4567'          # default for local installs: http://localhost:4567
+  @client_id       = '96a1cb8cd65b7717'
+  @client_secret   = '484dab6add45dd0c2e494c74433e616e'
+  @fidor_oauth_url = 'http://localhost:3000/api_sandbox/oauth'  # e.g https://fidor.com/oauth
+  @fidor_api_url   = 'http://localhost:3000/api_sandbox'    # e.g https://fidor.com/api_sandbox, https://fidor.com/api
 
   # 1. redirect to authorize url
   unless code = params["code"]
