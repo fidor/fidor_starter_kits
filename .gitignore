@@ -20,3 +20,4 @@ secrets.yml
 /coverage/*
 .ruby-version
 .ruby-gemset
+*.swp
