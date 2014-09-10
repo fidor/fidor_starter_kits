@@ -5,7 +5,7 @@ require 'zip'
 
 module FidorStarterKits
 
-  STARTER_KITS = %w{ node_tx golang_plain php_plain sinatra_plain }
+  STARTER_KITS = %w{ node_tx golang_plain php_plain sinatra_plain java_servlet }
 
   class << self
 
@@ -39,7 +39,8 @@ module FidorStarterKits
       FileUtils.copy_entry example_src_path, tmp_src_dir
 
       # read example files and replace placeholder with id/secret
-      example_files =  File.join(tmp_src_dir, 'example.*')
+      example_files =  File.join(tmp_src_dir, "**", "[Ee]xample.*")
+
       Dir.glob(example_files) do |example_file|
         content = File.read(example_file)
         %w(client_id client_secret app_url fidor_oauth_url fidor_api_url).each do |field|
@@ -51,8 +52,8 @@ module FidorStarterKits
       # create zip file in tmp dir
       zip_file_path = File.join(tmp_src_dir, "#{app_name}.zip")
       Zip::File.open(zip_file_path, Zip::File::CREATE) do |zipfile|
-        Dir[File.join(tmp_src_dir, '**', '**')].each do |file|
-          zipfile.add(file.sub("#{tmp_src_dir}/", ''), file)
+        Dir.glob(File.join(tmp_src_dir, '**', '**'),  File::FNM_DOTMATCH).each do |file|
+          zipfile.add(file.sub("#{tmp_src_dir}/", ''), file) unless file.end_with? '.'
         end
       end
       zip_file_path
