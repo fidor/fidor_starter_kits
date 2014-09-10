@@ -5,6 +5,8 @@ require 'zip'
 
 module FidorStarterKits
 
+  STARTER_KITS = %w{ node_tx golang_plain php_plain sinatra_plain }
+
   class << self
 
     # Directory path to starter kits
@@ -29,7 +31,7 @@ module FidorStarterKits
     # @return [Nil | String] path to zipped example im /tmp folder or nil if app does not exists
     def build(opts)
       app_name = opts[:app_name]
-      return if !app_name || !exists?(app_name)
+      return if !app_name || !exists?(app_name) || !app_name.in?(STARTER_KITS)
 
       # move example to a safe location
       example_src_path = File.join(path, app_name)

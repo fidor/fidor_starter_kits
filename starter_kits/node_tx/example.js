@@ -14,11 +14,11 @@
 // manager an need to be transfered into the config below:
 
 var fidor_config = {
-  app_port       : 3001,
-  app_url        : "http://localhost",
-  client_id      : "96a1cb8cd65b7717",
-  client_secret  : "484dab6add45dd0c2e494c74433e616e",
-  fidor_api_url  : "http://localhost:3000/api_sandbox/"
+  app_port       : 3141, // you might want to change this to match your app_url
+  app_url        : "<APP_URL>",
+  client_id      : "<CLIENT_ID>",
+  client_secret  : "<CLIENT_SECRET>",
+  fidor_api_url  : "<FIDOR_API_URL>"
 }
 
 // This app can be started by executing:
