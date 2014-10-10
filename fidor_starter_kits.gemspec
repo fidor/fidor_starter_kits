@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = FidorStarterKits::VERSION
   spec.authors       = ["Georg Leciejewski"]
   spec.email         = ["dev@fidor.de"]
-  spec.summary       = %q{Starter Kits for building fidor apps.}
-  spec.description   = %q{Fidor application examples for different languages }
+  spec.summary       = %q{BETA - Starter Kits for building fidor apps.}
+  spec.description   = %q{Fidor application examples for different languages. They rely on the BETA Version of the API so things may change.}
   spec.homepage      = ""
   spec.license       = "MIT"
 
