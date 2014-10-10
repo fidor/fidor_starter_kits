@@ -1,4 +1,4 @@
-# FidorStarterKits
+# FidorStarterKits - BETA
 
 This repo features fidor application examples. The apps use oAuth to 
 authenticate with fidor, so you must register an app at fidor first to get your 
