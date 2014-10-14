@@ -1,9 +1,9 @@
-# FidorStarterKits
+# FidorStarterKits - BETA
 
 This repo features fidor application examples. The apps use oAuth to 
 authenticate with fidor, so you must register an app at fidor first to get your 
 personal app credentials. 
-Afterwards just copy on of the /starter_kits add your app credentials to the 
+Afterwards just copy one of the /starter_kits, add your app credentials to the 
 example source and start to play.
 
 For Ruby Heros, this repo is also available as ruby gem and provides a tiny 

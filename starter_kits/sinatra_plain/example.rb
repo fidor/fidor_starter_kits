@@ -29,10 +29,18 @@ get '/' do
   # GET current user
   usr_url = "#{@fidor_api_url}/users/current?access_token=#{resp['access_token']}"
   user = ActiveSupport::JSON.decode( Net::HTTP.get URI(usr_url) )
+<<<<<<< HEAD
   acnt_url = "#{@fidor_api_url}/accounts?access_token=#{resp['access_token']}"
   "<h2>Hello #{user['email']}</h2>
    <i>May i present the access token response:</i>
    <blockquote>#{resp.inspect}</blockquote>
    <p>Now use the access token in <br> <a href='#{acnt_url}'>#{acnt_url}</a></p>
+=======
+  account_url = "#{@fidor_api_url}/accounts?access_token=#{resp['access_token']}"
+  "<h2>Hello #{user['email']}</h2>
+   <i>May i present the access token response:</i>
+   <blockquote>#{resp.inspect}</blockquote>
+   <p>Now use the access token in <br> <a href='#{account_url}'>#{account_url}</a></p>
+>>>>>>> fidor/master
    "
 end
