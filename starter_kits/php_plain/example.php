@@ -7,10 +7,7 @@
   $fidor_api_url = "<FIDOR_API_URL>";       # e.g https://fidor.com/api_sandbox vs /api
 
   $code = $_REQUEST["code"];
-<<<<<<< HEAD
 
-=======
->>>>>>> fidor/master
   # 1. redirect to authorize url
   if(empty($code)) {
     $dialog_url = $fidor_oauth_url . "/authorize?" .
@@ -35,19 +32,6 @@
           'content' => http_build_query($data),
       ),
   );
-<<<<<<< HEAD
-  # use PHP5 internal POST method
-  $context  = stream_context_create($options);
-  $result = json_decode(file_get_contents($token_url, false, $context));
-  print_r($result);
-
-  #$usr_url = $fidor_api_url . "/users/current?access_token=" . $resp->access_token;
-  # GET info about current user
-  #$user = json_decode(file_get_contents($usr_url));
-  #echo("User: " . $user->email);
-
-?>
-=======
   # get the access_token, use PHP5 internal POST method
   $context  = stream_context_create($options);
   $resp = json_decode(file_get_contents($token_url, false, $context));
@@ -57,11 +41,10 @@
   $user = json_decode(file_get_contents($usr_url));
   $transactions_url = $fidor_api_url . "/transactions?access_token=" . $resp->access_token;
   echo( "<h2>Hello " . $user->email . "</h2>
-         <i>May i present the access token response:</i>
+         <i>May I present the access token response:</i>
          <blockquote>");
    print_r($resp);
    echo("</blockquote>
-        <p>Now use the access token in <br> <a href='" . $transactions_url . "'>".$transactions_url."</a></p>");
+        <p>Now use the access token here: <br> <a href='" . $transactions_url . "'>".$transactions_url."</a></p>");
 
 ?>
->>>>>>> fidor/master
