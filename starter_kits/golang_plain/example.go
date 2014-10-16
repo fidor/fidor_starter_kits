@@ -18,7 +18,7 @@ import (
 	"net/url"
 )
 
-// The following sections defines the settings you require for the
+// The following sections define the settings you require for the
 // app to be able to connect to and authorize itself against the api.
 
 // app ID and secret, can be found in this apps "Details" page in the
