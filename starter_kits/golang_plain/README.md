@@ -1,6 +1,6 @@
 # Basic Go Example
 
-This is a basic example project that demostrates the Fidor API OAuth
+This is a basic example project that demonstrates the Fidor API OAuth
 flow. It provides the same functionality as the php example if you would
 like to compare the two sample projects.
 
