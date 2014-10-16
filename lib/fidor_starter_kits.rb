@@ -2,6 +2,7 @@ require 'fidor_starter_kits/version'
 require 'fileutils'
 require 'tmpdir'
 require 'zip'
+require 'json'
 
 module FidorStarterKits
 
@@ -31,7 +32,7 @@ module FidorStarterKits
     # @return [Nil | String] path to zipped example im /tmp folder or nil if app does not exists
     def build(opts)
       app_name = opts[:app_name]
-      return if !app_name || !exists?(app_name) || !app_name.in?(STARTER_KITS)
+      return if !app_name || !exists?(app_name) || !(STARTER_KITS).include?(app_name)
 
       # move example to a safe location
       example_src_path = File.join(path, app_name)
@@ -57,6 +58,30 @@ module FidorStarterKits
         end
       end
       zip_file_path
+    end
+
+    def all
+      @conf ||= {}
+      return @conf unless @conf.length == 0
+
+      STARTER_KITS.each do |kit|
+        base = File.join(path, kit)
+        meta = File.join(base, ".fidor_meta.json")
+        if File.exists? meta
+          File.open(meta) {|f| @conf[kit] = JSON.parse(f.read)}
+        else
+          @conf[kit] = "meh"   
+        end
+      end
+      return @conf
+    end
+
+    def get app_name
+      all[app_name]
+    end
+
+    def each 
+      all.each_value { |conf| yield conf } 
     end
 
   end

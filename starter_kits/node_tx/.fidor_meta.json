@@ -1,0 +1,7 @@
+{
+  "display_name" : "Node Transactions",
+  "description"  : "A simple nodejs based app, showing how to get user transactions",
+  "app_name":"node_tx",
+  "app_url":"http://localhost:3001",
+  "callback_urls":"http://localhost:3001/code"
+}

@@ -1,0 +1,7 @@
+{
+  "display_name" : "Go Plain",
+  "description"  : "A simple Go based app, showing how to get the access token",
+  "app_name":"golang_plain",
+  "app_url":"http://localhost:8080",
+  "callback_urls":"http://localhost:8080"
+}

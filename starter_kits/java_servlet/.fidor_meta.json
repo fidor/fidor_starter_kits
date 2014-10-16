@@ -1,0 +1,7 @@
+{
+  "display_name" : "Java Servlet Plain",
+  "description"  : "A simple java servlet based app, showing how to get the access token",
+  "app_name":"java_servlet",
+  "app_url":"http://localhost:8080/JavaServlet/Example",
+  "callback_urls":"http://localhost:8080/JavaServlet/Example"
+}
