@@ -1,6 +1,6 @@
 {
   "display_name" : "PHP Plain",
-  "description"  : "A simple Go based app, showing how to get the access token",
+  "description"  : "A simple php script, showing how to get the access token",
   "app_name":"php_plain",
   "app_url":"http://localhost:8000/example.php",
   "callback_urls":"http://localhost:8080/example.php"
