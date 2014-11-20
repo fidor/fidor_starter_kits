@@ -53,9 +53,7 @@ var querystring = require('querystring')
 // @param cb          : callback function(err, transactions)
 function apiGetTransactions(accessToken, cb) {
   // URL endpoint to call to retrieve transactions.
-  var tx_url = fidor_config.fidor_api_url+
-               "/transactions?access_token="+
-               accessToken
+  var tx_url = fidor_config.fidor_api_url+"/transactions?access_token="+ accessToken
 
   var get = http.get(tx_url, function(res){
     // response may come in numerous chunks, we need to collect
@@ -71,7 +69,7 @@ function apiGetTransactions(accessToken, cb) {
         return
       }
       var d = JSON.parse(data)
-      cb(d.error, d.transactions)
+      cb(d.error, d.data)
     })
   })
 
