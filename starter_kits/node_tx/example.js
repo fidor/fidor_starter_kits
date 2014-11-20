@@ -15,7 +15,7 @@
 
 var fidor_config = {
   app_port       : 3141, // you might want to change this to match your app_url
-  app_url        : "<APP_URL>",
+  app_url        : "<APP_URL>", // must also include the port e.g http://localhost:3141
   client_id      : "<CLIENT_ID>",
   client_secret  : "<CLIENT_SECRET>",
   fidor_api_url  : "<FIDOR_API_URL>"
@@ -23,20 +23,20 @@ var fidor_config = {
 
 // This app can be started by executing:
 //
-//    node server.js
+//    node example.js
 //
 // Once the app is running, it can be accessed on:
 //
-//    http://localhost:3001
+//    http://localhost:3141
 //
 // or on whatever port is configured above.
 //
 // The app checks whether an OAuth access token is available for the
-// user, if not, the user is redirected to the OAuth endpoit. After
+// user, if not, the user is redirected to the OAuth endpoint. After
 // successful authentication and authorization, the OAuth endpoint
 // redirects the user back to the app. Specifically to:
 //
-//     http://localhost:3001/code
+//     http://localhost:3141/code
 //
 // This redirect will contain a query with the OAuth code. The app uses
 // this code to request an OAuth access-token. The retrieved token is stored with
@@ -56,10 +56,10 @@ function apiGetTransactions(accessToken, cb) {
   var tx_url = fidor_config.fidor_api_url+
                "/transactions?access_token="+
                accessToken
-  
+
   var get = http.get(tx_url, function(res){
-    // response may come in numerous chunks, we need to collect 
-    // them and reassemble the entire answer when all data has 
+    // response may come in numerous chunks, we need to collect
+    // them and reassemble the entire answer when all data has
     // been retrieved.
     var data = new Buffer(0)
     res.on('data', function(chunk){
@@ -84,15 +84,15 @@ function apiGetTransactions(accessToken, cb) {
 // The handle for the Apps /transactions endpoint.
 // @param request  : http request object
 // @param response : http response
-// 
+//
 function getTransactions(request, response) {
   var cookie_token = getCookie(request, "oauth_token")
-  // if we don't have a token for this user already, redirect 
+  // if we don't have a token for this user already, redirect
   // the user to the OAuth server
   if (!cookie_token) {
-    var oauth_url = fidor_config.fidor_api_url+"/oauth/authorize?client_id="+
-                    fidor_config.client_id+"&redirect_uri="+fidor_config.app_url+":"+
-                    fidor_config.app_port+"/code"
+    var oauth_url = fidor_config.fidor_api_url+"/oauth/authorize?"+
+                    "client_id="+fidor_config.client_id+
+                    "&redirect_uri="+fidor_config.app_url+"/code"
     response.writeHead(307, {"location" : oauth_url})
     response.end()
     return
@@ -100,7 +100,7 @@ function getTransactions(request, response) {
 
   // trade in the key we stored in the cookie for the actual oauth token.
   var oauth_token = getToken(cookie_token)
-  
+
   // call the api with the OAuth token:
   apiGetTransactions(oauth_token, function (err, transactions) {
     if (err) {
@@ -136,7 +136,7 @@ function getOAuthToken(code, cb) {
     port  : oauth_url.port,
     host  : oauth_url.hostname
   }
-  
+
   // ... what to send
   var postData = {
     code          : code,
@@ -144,7 +144,7 @@ function getOAuthToken(code, cb) {
     client_secret : fidor_config.client_secret
   }
   postData = querystring.stringify(postData)
-  
+
   var token_request = http.request(postOptions, function (res) {
     // collect the data chunks we received and reassemble them
     // on request end ...
@@ -167,21 +167,21 @@ function getOAuthToken(code, cb) {
   token_request.end()
 }
 
-// handler we provide to handle our user being redirected back 
-// to us from the OAuth server with the OAuth `code` in the 
+// handler we provide to handle our user being redirected back
+// to us from the OAuth server with the OAuth `code` in the
 // query of the url.
 function setOAuthToken(request, response) {
   var u = url.parse(request.url)
   var code = querystring.parse(u.query)["code"]
-  
-  // if the request does not contain a ?code=adsfasdfasdf 
+
+  // if the request does not contain a ?code=adsfasdfasdf
   // query, it's not valid.
   if (!code) {
     response.writeHead(400, "Bad Request")
     response.end()
     return
   }
-  
+
   // exchange the code for a token ...
   getOAuthToken(code, function (err, token) {
     if (err) {
@@ -200,7 +200,7 @@ function setOAuthToken(request, response) {
     // may need it in the future without leaking the actual access_token
     // via the cookie
 
-    var token_key = storeToken(token)    
+    var token_key = storeToken(token)
     setCookie(response, "oauth_token", token_key)
 
     // send the user back to the transactions url, this time, with a
@@ -216,10 +216,10 @@ function listener(req, resp) {
   if (req.method !== "GET") {
     resp.writeHead(403, "Forbidden")
   }
-  
+
   var u = url.parse(req.url)
   switch (u.pathname) {
-    case "/":                 
+    case "/":
       console.log("start page ...")
       resp.writeHead(200, {"Content-Type" : "text/html"})
       resp.end(hello_template)
@@ -274,7 +274,7 @@ var hello_template = ""+
 "  <p><a href='/clear_cookie'>Clear Cookie</a></p>" +
 "  <p><a href='/clear_all_cookies'>Clear All Cookies</a></p>" +
 "</body>" +
-"</html>" 
+"</html>"
 
 // Code for setting and clearing cookies. Typically a framework would
 // handle the intricacies of cookie handling, but we opted not to
@@ -312,7 +312,7 @@ function getCookies(request) {
       cookies[c[0].trim()] = c[1]
     })
   }
-  return cookies 
+  return cookies
 }
 
 function getCookie(request, key) {

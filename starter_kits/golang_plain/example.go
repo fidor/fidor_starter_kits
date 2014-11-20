@@ -42,6 +42,7 @@ func main() {
 	// register a handler function (see next function) to service
 	// requests ...
 	http.HandleFunc("/", indexHandler)
+	fmt.Printf("Now open http://localhost:8080")
 	// ... and start listening.
 	http.ListenAndServe(":8080", nil)
 }
@@ -63,7 +64,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		if token, err := retrieveTokenFromCode(code); err != nil {
 			fmt.Printf("err: %v\n", err)
 			w.WriteHeader(500)
-			fmt.Fprintf(w, "Unfortunately, an error occured retrieving oauth token")
+			fmt.Fprintf(w, "Unfortunately, an error occurred retrieving oauth token")
 		} else {
 			// ... and finally, greet the user and assemble links
 			renderWelcome(w, token)
@@ -122,7 +123,7 @@ type UserResponse struct {
 	Email string `json:"email"`
 }
 
-// function to retreive user information from the API
+// function to retrieve user information from the API
 func getUser(token string) (u UserResponse, err error) {
 	// Assemble endpoint URL...
 	url := fmt.Sprintf("%s/users/current?access_token=%s", fidor_api_url, token)
