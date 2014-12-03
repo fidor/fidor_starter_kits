@@ -88,9 +88,9 @@ function getTransactions(request, response) {
   // if we don't have a token for this user already, redirect
   // the user to the OAuth server
   if (!cookie_token) {
-    var oauth_url = fidor_config.fidor_api_url+"/oauth/authorize?"+
-                    "client_id="+fidor_config.client_id+
-                    "&redirect_uri="+fidor_config.app_url+"/code"
+    var oauth_url = fidor_config.fidor_api_url+"/oauth/authorize?client_id="+
+                    fidor_config.client_id+"&state=123&response_type=code&redirect_uri="+fidor_config.app_url+":"+
+                    fidor_config.app_port+"/code"
     response.writeHead(307, {"location" : oauth_url})
     response.end()
     return
