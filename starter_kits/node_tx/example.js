@@ -139,7 +139,8 @@ function getOAuthToken(code, cb) {
   var postData = {
     code          : code,
     client_id     : fidor_config.client_id,
-    client_secret : fidor_config.client_secret
+    client_secret : fidor_config.client_secret,
+    redirect_uri  : fidor_config.app_url+":"+fidor_config.app_port+"/code"
   }
   postData = querystring.stringify(postData)
 
