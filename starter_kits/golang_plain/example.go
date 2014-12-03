@@ -72,7 +72,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		// we don't have an oauth `code` yet, so we need to
 		// redirect the user to the OAuth provider to get one ...
-		oauth_url := fmt.Sprintf("%s/authorize?client_id=%s&redirect_uri=%s",
+		oauth_url := fmt.Sprintf("%s/authorize?client_id=%s&state=123&response_type=code&redirect_uri=%s",
 			fidor_oauth_url,
 			client_id,
 			url.QueryEscape(oauth_cb_url))
@@ -99,6 +99,7 @@ func retrieveTokenFromCode(code string) (token string, err error) {
 		"client_id":     {client_id},
 		"client_secret": {client_secret},
 		"code":          {code},
+		"redirect_uri":  {url.QueryEscape(oauth_cb_url)},
 	}
 	// Call API
 	if resp, err := http.PostForm(tokenUrl, tokenPayload); err != nil {
