@@ -85,6 +85,7 @@ public class Example extends HttpServlet {
 				.addParameter("redirect_uri", app_url)
 				.addParameter("code", code)
 				.addParameter("client_secret", client_secret)
+				.addParameter("grant_type", "authorization_token")
 				.build();
 		
 		HttpResponse resp = httpClient.execute(req);
@@ -103,7 +104,7 @@ public class Example extends HttpServlet {
 	}
 
 	private String getCodeUrl() {
-		return fidor_oauth_url + "/authorize?client_id=" + client_id + "&redirect_uri=" + app_url;
+		return fidor_oauth_url + "/authorize?client_id=" + client_id + "&redirect_uri=" + app_url +"&state=1234&response_type=authroization_code";
 	}
 	
 	private String getAccountUrl(String token) {
