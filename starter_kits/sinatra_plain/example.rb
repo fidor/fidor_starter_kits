@@ -13,7 +13,7 @@ get '/' do
 
   # 1. redirect to authorize url
   unless code = params["code"]
-    dialog_url = "#{@fidor_oauth_url}/authorize?client_id=#{@client_id}&redirect_uri=#{CGI::escape(@app_url)}"
+    dialog_url = "#{@fidor_oauth_url}/authorize?client_id=#{@client_id}&redirect_uri=#{CGI::escape(@app_url)}&state=1234&response_type=code"
     redirect dialog_url
   end
 
@@ -21,9 +21,11 @@ get '/' do
   token_url = URI("#{@fidor_oauth_url}/token")
   # GET and parse access_token response json
   res = Net::HTTP.post_form(token_url, 'client_id' => @client_id,
-                                        'redirect_uri' => CGI::escape(@app_url),
-                                        'code' =>code,
-                                        'client_secret'=>@client_secret)
+                                       'redirect_uri' => CGI::escape(@app_url),
+                                       'code' =>code,
+                                       'client_secret'=>@client_secret,
+                                       'grant_type'=>'authorization_code')
+
   resp = ActiveSupport::JSON.decode(res.body)
 
   # GET current user
