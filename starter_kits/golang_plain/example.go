@@ -16,6 +16,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"errors"
 )
 
 // The following sections define the settings you require for the
@@ -23,17 +24,17 @@ import (
 
 // app ID and secret, can be found in this apps "Details" page in the
 // AppManager.
-var client_id = "<CLIENT_ID>"
+var client_id     = "<CLIENT_ID>"
 var client_secret = "<CLIENT_SECRET>"
 
 // Fidor's OAuth Endpoint (this changes between Sandbox and Production)
 var fidor_oauth_url = "<FIDOR_OAUTH_URL>" // e.g https://fidor.com/api_sandbox/oauth
 // The OAuth Endpoint this App provides
-var oauth_cb_url = "<APP_URL>"
+var oauth_cb_url    = "<APP_URL>"
 
 // The URL of the Fidor API (this changes between Sandbox and
 // Production)
-var fidor_api_url = "<FIDOR_API_URL>" // e.g https://fidor.com/api_sandbox vs /api
+var fidor_api_url   = "<FIDOR_API_URL>" // e.g https://fidor.com/api_sandbox vs /api
 
 
 
@@ -100,11 +101,16 @@ func retrieveTokenFromCode(code string) (token string, err error) {
 		"client_secret": {client_secret},
 		"code":          {code},
 		"redirect_uri":  {url.QueryEscape(oauth_cb_url)},
+		"grant_type":    {"autorization_code"}
 	}
 	// Call API
 	if resp, err := http.PostForm(tokenUrl, tokenPayload); err != nil {
+		println(err)
 		return "", err
 	} else {
+		if resp.StatusCode != 200 {
+			return "", errors.New(resp.Status)
+		}
 		// if successful, pick the access_token out of the reply.
 		var tokenResponse TokenResponse
 		decoder := json.NewDecoder(resp.Body)
