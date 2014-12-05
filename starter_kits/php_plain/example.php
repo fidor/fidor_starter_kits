@@ -12,7 +12,8 @@
   if(empty($code)) {
     $dialog_url = $fidor_oauth_url . "/authorize?" .
                   "client_id=". $app_id .
-                  "&redirect_uri=" . urlencode($app_url);
+                  "&redirect_uri=" . urlencode($app_url) .
+                  "&state=1234&response_type=code";
 
     echo("<script> top.location.href='" . $dialog_url . "'</script>");
   }
@@ -22,7 +23,8 @@
   $data = array('client_id' => $app_id,
                 'client_secret' => $app_secret,
                 'code' => $code,
-                'redirect_uri' => urlencode($app_url)
+                'redirect_uri' => urlencode($app_url),
+                'grant_type' => 'authorization_code'
                 );
   // use key 'http' even if you send the request to https://...
   $options = array(
