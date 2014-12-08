@@ -1,12 +1,18 @@
 # FidorStarterKits - BETA
 
-This repo features fidor application examples. The apps use oAuth to 
-authenticate with fidor, so you must register an app at fidor first to get your 
-personal app credentials. 
-Afterwards just copy one of the /starter_kits, add your app credentials to the 
-example source and start to play.
+This repo features Fidor application examples. The apps use oAuth to
+authenticate with fidor, so you must register an app at fidor first to get your
+personal app credentials.
 
-For Ruby Heros, this repo is also available as ruby gem and provides a tiny 
+For a quick start the Fidor App Manager(where you register your app) features a
+'create&download app' method. This creates a new app, writes the required oauth
+information into the source files and delivers the example as zipped download.
+
+If you choose the manual way to explore our example apps, simply checkout this
+repo, register and app and add the required credentials, URL's to the sources.
+
+
+For Ruby Heros, this repo is also available as ruby gem and provides a tiny
 helper for app creation, see Install & Usage.
 
 
@@ -38,7 +44,7 @@ Create a zipped app with credentials and the fidor url:
               fidor_oauth_url: 'https://fidor-oauth-url.de/oauth',
               fidor_api_url: 'https://fidor-api-url.de/api_sandbox'
             }
-        
+
     zip_file_path = FidorStarterKits.build(opts)
     # => /tmp/sinatra_plain-xyz/sinatra_plain.zip
     # => mv / cp / download is up to you babee
@@ -46,9 +52,10 @@ Create a zipped app with credentials and the fidor url:
 ```
 ## Build your own starter kit
 
-As a quickstart for new developers we zip and download the examples in our 
-application manager. Before the following placeholders inside in your main 
-example.xy file are substituted with the according values from the app:
+As a quickstart for new developers we zip and download the examples in our
+application manager. Before the following placeholders inside in your main
+example.xy file are substituted with the according values from the app
+(client_id/secret) and the values in .fidor_meta.json:
 
     <APP_URL>                   # default http://localhost:8000/example.php
     <CLIENT_ID>
@@ -56,7 +63,7 @@ example.xy file are substituted with the according values from the app:
     <FIDOR_OAUTH_URL>           # e.g https://fidor.com/oauth
     <FIDOR_API_URL>
 
-So just add those to example.[rb, php, ..] and see existing examples and specs 
+So just add those to example.[rb, php, ..] and see existing examples and specs
 for a reference.
 
 ## Contributing
