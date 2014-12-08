@@ -101,7 +101,7 @@ func retrieveTokenFromCode(code string) (token string, err error) {
 		"client_secret": {client_secret},
 		"code":          {code},
 		"redirect_uri":  {url.QueryEscape(oauth_cb_url)},
-		"grant_type":    {"autorization_code"}
+		"grant_type":    {"authorization_code"},
 	}
 	// Call API
 	if resp, err := http.PostForm(tokenUrl, tokenPayload); err != nil {
