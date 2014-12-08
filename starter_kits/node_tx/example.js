@@ -14,12 +14,13 @@
 // manager an need to be transfered into the config below:
 
 var fidor_config = {
-  app_port       : 3001,
   app_url        : "<APP_URL>",
   client_id      : "<CLIENT_ID>",
   client_secret  : "<CLIENT_SECRET>",
   fidor_api_url  : "<FIDOR_API_URL>"
 }
+
+
 
 
 // redirect the user to the OAuth authorization endpoint with the
@@ -39,7 +40,7 @@ function redirect_to_oauth(response){
   return
 }
 
-<// Execute a POST request against the OAUTH token endpoint
+// Execute a POST request against the OAUTH token endpoint
 // in order to exchange: code, client_id, client_secret, 
 // rerdirect_uri and grant_type for an auth_token.
 function retrieve_access_token_from_code( code, cb ) {
@@ -85,7 +86,7 @@ function retrieve_access_token_from_code( code, cb ) {
   token_request.end()
 }
 
-<
+
 // Display a friendly message and links to the API Endpoints.
 function renderWelcome(request, response, token) {
   response.writeHead(200, {"Content-Type" : "text/html"})
@@ -125,6 +126,9 @@ function listener (request, response) {
 var url           = require("url")
 var querystring   = require("querystring")
 var http          = require("http")
+
+var _url = url.parse(fidor_config.app_url)
+fidor_config.app_port = _url.port
 
 // start the server
 var server = http.createServer(listener)

@@ -3,5 +3,5 @@
   "description"  : "A simple nodejs based app, showing how to get user transactions",
   "app_name":"node_tx",
   "app_url":"http://localhost:3141",
-  "callback_urls":"http://localhost:3141/code"
+  "callback_urls":"http://localhost:3141"
 }
