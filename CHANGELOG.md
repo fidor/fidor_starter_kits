@@ -1,6 +1,8 @@
 # Changelog Fidor Admin API Schema
 See [commit messages](https://github.com/fidor/fidor_starter_kits/commits/) for details.
 
+##2015-01 v.0.3.2
+*bugfix: proper TLS handling for node example
 
 ##2014-12
 
