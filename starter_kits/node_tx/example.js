@@ -63,7 +63,8 @@ function retrieve_access_token_from_code( code, cb ) {
   }
   postData = querystring.stringify(postData)
 
-  var token_request = http.request(postOptions, function (res) {
+	var http_module   = oauth_url.protocol == "https:" ? https : http
+  var token_request = http_module.request(postOptions, function (res) {
     // collect the data chunks we received and reassemble them
     // on request end ...
     var data = new Buffer(0)
@@ -126,6 +127,7 @@ function listener (request, response) {
 var url           = require("url")
 var querystring   = require("querystring")
 var http          = require("http")
+var https         = require("http")
 
 var _url = url.parse(fidor_config.app_url)
 fidor_config.app_port = _url.port
