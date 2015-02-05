@@ -32,7 +32,7 @@ public class Example extends HttpServlet {
 	private final String fidor_api_url = "<FIDOR_API_URL>";
 	private HttpClient httpClient;
 	private JSONParser parser;
-    
+
 	/**
      * @see HttpServlet#HttpServlet()
      */
@@ -56,7 +56,7 @@ public class Example extends HttpServlet {
 					HttpResponse userResponse = httpClient.execute(RequestBuilder.get().setUri(getUserUri(token)).build());
 					String body = EntityUtils.toString(userResponse.getEntity());
 					JSONObject user = (JSONObject)parser.parse(body);
-					
+
 					response.setContentType("text/html");
 					PrintWriter writer = response.getWriter();
 					writer.append(
@@ -70,7 +70,7 @@ public class Example extends HttpServlet {
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-		
+
 		}
 	}
 
@@ -85,9 +85,9 @@ public class Example extends HttpServlet {
 				.addParameter("redirect_uri", app_url)
 				.addParameter("code", code)
 				.addParameter("client_secret", client_secret)
-				.addParameter("grant_type", "authorization_token")
+				.addParameter("grant_type", "authorization_code")
 				.build();
-		
+
 		HttpResponse resp = httpClient.execute(req);
 		String body = EntityUtils.toString(resp.getEntity());
 		Object jsonResponse = parser.parse(body);
@@ -100,15 +100,15 @@ public class Example extends HttpServlet {
 	}
 
 	private URI getTokenUri() throws URISyntaxException {
-		return new URI(fidor_oauth_url + "/token"); 
+		return new URI(fidor_oauth_url + "/token");
 	}
 
 	private String getCodeUrl() {
-		return fidor_oauth_url + "/authorize?client_id=" + client_id + "&redirect_uri=" + app_url +"&state=1234&response_type=authroization_code";
+		return fidor_oauth_url + "/authorize?client_id=" + client_id + "&redirect_uri=" + app_url +"&state=1234&response_type=code";
 	}
-	
+
 	private String getAccountUrl(String token) {
 		return fidor_api_url + "/accounts?access_token=" + token;
 	}
-	
+
 }
