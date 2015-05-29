@@ -127,7 +127,7 @@ function listener (request, response) {
 var url           = require("url")
 var querystring   = require("querystring")
 var http          = require("http")
-var https         = require("http")
+var https         = require("https")
 
 var _url = url.parse(fidor_config.app_url)
 fidor_config.app_port = _url.port
