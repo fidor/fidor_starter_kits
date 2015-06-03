@@ -13,10 +13,10 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
-	"errors"
 )
 
 // The following sections define the settings you require for the
@@ -24,32 +24,28 @@ import (
 
 // app ID and secret, can be found in this apps "Details" page in the
 // AppManager.
-var client_id     = "<CLIENT_ID>"
+var client_id = "<CLIENT_ID>"
 var client_secret = "<CLIENT_SECRET>"
 
 // Fidor's OAuth Endpoint (this changes between Sandbox and Production)
 var fidor_oauth_url = "<FIDOR_OAUTH_URL>" // e.g https://fidor.com/api_sandbox/oauth
 // The OAuth Endpoint this App provides
-var oauth_cb_url    = "<APP_URL>"
+var oauth_cb_url = "<APP_URL>"
 
 // The URL of the Fidor API (this changes between Sandbox and
 // Production)
-var fidor_api_url   = "<FIDOR_API_URL>" // e.g https://fidor.com/api_sandbox vs /api
-
-
-
+var fidor_api_url = "<FIDOR_API_URL>" // e.g https://fidor.com/api_sandbox vs /api
 
 func main() {
 	// register a handler function (see next function) to service
 	// requests ...
 	http.HandleFunc("/", indexHandler)
-	fmt.Printf("Now open http://localhost:8080")
+	fmt.Printf("Now open http://localhost:8080\n")
 	// ... and start listening.
 	http.ListenAndServe(":8080", nil)
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
-
 	// ignore any favicon requests, etc.
 	if r.URL.Path != "/" {
 		w.WriteHeader(404)
@@ -83,7 +79,6 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(307)
 	}
 }
-
 
 // Our TokenResponse representation used to pick it out from the JSON
 // returned by the OAuth server.
@@ -122,7 +117,6 @@ func retrieveTokenFromCode(code string) (token string, err error) {
 	}
 }
 
-
 // Our server code only makes a single call to the API to retrieve user
 // information. This is our internal representation of the returned JSON
 // used to pick out the user's email.
@@ -145,7 +139,6 @@ func getUser(token string) (u UserResponse, err error) {
 		}
 	}
 }
-
 
 // once all the OAuth calls have been taken care of, this function is
 // called from the http handler. It retrieves the user's email address
