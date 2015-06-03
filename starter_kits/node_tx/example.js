@@ -4,34 +4,47 @@
 //
 // This sample intentionally does not require any further dependencies.
 // We tried to keep things as simple as possible in order to illustrate the
-// underlying mechanisms of the API.
+// underlying mechanisms of the API. This comes at the expense of having
+// to handled cookies and session in the sample...
 //
 // Using this code
 // ---------------
 //
+// The provided source code is divided into three sections:
+// 1.) Handling OAuth calls
+// 2.) Cookie and Session Handling
+// 3.) Handling Browser Requests
+//
 // In order to use this code, a sample app needs to be installed in the
 // Fidor App Manager. Settings for this app are displayed in the app
-// manager an need to be transfered into the config below:
+// manager an need to be transfered into the config below, if you
+// downloaded the code directly from the Fidor App Manager, these
+// settings should be filled in for you:
 
 var fidor_config = {
   app_url        : "<APP_URL>",
   client_id      : "<CLIENT_ID>",
   client_secret  : "<CLIENT_SECRET>",
-  fidor_api_url  : "<FIDOR_API_URL>"
+  fidor_api_url  : "<FIDOR_API_URL>",
+  fidor_oauth_url: "<FIDOR_OAUTH_URL>"
 }
 
 
 
 
+/************************************************************************
+/* BEGIN: OAuth Calls
+************************************************************************/
 // redirect the user to the OAuth authorization endpoint with the
 // following params:
 //   - client_id
 //   - state
 //   - response_type
 //   - redirect_uri
-function redirect_to_oauth(response){
-  var redirect_uri = encodeURIComponent(fidor_config.app_url)
-  var oauth_url = fidor_config.fidor_api_url+
+function redirect_to_oauth(response, target_endpoint){
+  var oauth_uri = fidor_config.app_url+"/oauth?ep="+target_endpoint
+  var redirect_uri = encodeURIComponent(oauth_uri)
+  var oauth_url = fidor_config.fidor_oauth_url+
                   "/oauth/authorize?client_id="+fidor_config.client_id+
                   "&state=123&response_type=code&"+
                   "redirect_uri="+redirect_uri
@@ -40,11 +53,24 @@ function redirect_to_oauth(response){
   return
 }
 
+//
 // Execute a POST request against the OAUTH token endpoint
 // in order to exchange: code, client_id, client_secret, 
-// rerdirect_uri and grant_type for an auth_token.
-function retrieve_access_token_from_code( code, cb ) {
-  var oauth_url = url.parse(fidor_config.fidor_api_url)
+// redirect_uri and grant_type for an auth_token.
+//
+// This corresponds to OAuth 3.2 Token Endpoint / 4.1.3 Access Token
+// Request.
+//
+// Parameter:
+// - the code that was returned from the Authorization Endpoint
+// - the target endpoint (transactions/ or accounts/) that was requested
+//   in order to reconstruct the 'redirect-uri' parameter of the
+//   Authorization call.
+// - callback(error, access_token)
+//
+function retrieve_access_token_from_code( code, target_endpoint, cb ) {
+  var oauth_url = url.parse(fidor_config.fidor_oauth_url)
+  
   // where to send the data ...
   var postOptions = {
     method: "POST",
@@ -54,16 +80,18 @@ function retrieve_access_token_from_code( code, cb ) {
   }
 
   // ... what to send
+  var redirect_uri = fidor_config.app_url+"/oauth?ep="+target_endpoint
   var postData = {
     code          : code,
     client_id     : fidor_config.client_id,
     client_secret : fidor_config.client_secret,
-    redirect_uri  : encodeURIComponent(fidor_config.app_url),
+    redirect_uri  : encodeURIComponent(redirect_uri),
     grant_type    : "authorization_code"
   }
   postData = querystring.stringify(postData)
 
 	var http_module   = oauth_url.protocol == "https:" ? https : http
+
   var token_request = http_module.request(postOptions, function (res) {
     // collect the data chunks we received and reassemble them
     // on request end ...
@@ -74,7 +102,6 @@ function retrieve_access_token_from_code( code, cb ) {
 
     res.on('end', function() {
       var oauth_response = JSON.parse(data)
-      console.log(oauth_response)
       cb(oauth_response.error, oauth_response.access_token)
     })
   })
@@ -87,39 +114,208 @@ function retrieve_access_token_from_code( code, cb ) {
   token_request.end()
 }
 
+/************************************************************************
+/* END: OAuth Calls
+************************************************************************/
 
-// Display a friendly message and links to the API Endpoints.
-function renderWelcome(request, response, token) {
-  response.writeHead(200, {"Content-Type" : "text/html"})
-  var content = hello_template.replace(/{token}/g, token)
-  console.log(content)
-  console.log(token)
-  content = content.replace(/{api_uri}/g, fidor_config.fidor_api_url)
-  response.end(content)
+
+/************************************************************************
+/* BEGIN: Cookie & Session Handling
+************************************************************************/
+var COOKIE_NAME="NODE_SESSION"
+var sessions = {}
+
+// retrieve the random session_id from the cookie.
+function getSession(req) {
+  var cookies = req.headers.cookie
+  console.log(cookies)
+  var session = null
+  if (cookies) {
+    var cookieArr = cookies.split(";")
+    for (var i = 0 ; i != cookieArr.length ; ++i) {
+      var keyValue = cookieArr[i].split("=")
+      if (keyValue && keyValue.length == 2 && keyValue[0].trim() == COOKIE_NAME) {
+        session = keyValue[1]
+        break
+      } else {
+        console.log(keyValue[0])
+      }
+    }
+  }
+  return session
+}
+function getAccessTokenFromSession(req) {
+  var session = getSession(req)
+  console.log("Session: "+session)
+  var access_token = null
+  if (session) {
+    access_token = sessions[session]
+  }
+  return access_token
+}
+function createSession(resp, access_token) {
+  function randomString(len) {
+    var hex = "0123456789abcdef"
+    var rnd = ""
+    for (var i = 0; i!= len; ++i) {
+      rnd += hex[Math.floor(Math.random()*hex.length)]
+    }
+    return rnd
+  }
+  var rnd = randomString(20)
+  sessions[rnd] = access_token
+  resp.setHeader("Set-Cookie", COOKIE_NAME+"="+rnd)
+}
+function removeSessions(req, resp) {
+  // find cookie
+  var session = getSession(req)
+  // delete from sessions
+  delete sessions[session]
+  // set expired
+  resp.setHeader("Set-Cookie", COOKIE_NAME+"=nothing; expires=Thu, 01 Jan 1970 00:00:00 GMT")
 }
 
-// main http functionality
-function listener (request, response) {
+/************************************************************************
+/* END: Cookie & Session Handling
+************************************************************************/
 
-  var u    = url.parse(request.url)
-  // reject everything but GET.
-  if (request.method !== "GET" || u.pathname !== "/") {
+/************************************************************************
+/* BEGIN: HTTP Handling
+************************************************************************/
+
+//
+// Display a friendly message and links to the API Endpoints.
+//
+function renderWelcome(request, response) {
+  response.writeHead(200, {"Content-Type" : "text/html"})
+  response.end(hello_template)
+}
+
+
+
+
+function render (endpoint, req, res) {
+  //
+  // call the api endpoint and pipe the response from the API back to
+  // the caller
+  //
+  function pipeApi(endpoint, access_token, res) {
+    var api_endpoint = url.parse(fidor_config.fidor_api_url+endpoint)
+    var http_module   = api_endpoint.protocol == "https:" ? https : http
+    var http_options = {
+      hostname: api_endpoint.hostname,
+      path: api_endpoint.path,
+      port: api_endpoint.port,
+      method: "GET",
+      headers: {
+        "Authorization": "Bearer "+access_token
+      }
+    }
+
+    var api_request = http_module.request(http_options, function(api_response) {
+      res.setHeader('Content-Type', api_response.headers['content-type'])
+      res.writeHead(api_response.statusCode, api_response.statusMessage)
+      api_response.on('data', function(chunk) {
+        res.write(chunk)
+      })
+      api_response.on('end', function(){
+        res.end()
+      })
+    })
+
+    api_request.on('error', function (err) {
+      res.writeHead(500, {'Content-Type': 'text/plain'})
+      res.end(err.toString())
+    })
+    api_request.end()
+  }
+
+  //
+  // utility to check whether access token is via session cookie, if not
+  // redirects account holder to OAuth Authorization Endpoint.
+  //
+  function getAccessToken(redirect, req, res, cb) {
+    var accesstoken = getAccessTokenFromSession(req)
+    if (!accesstoken) {
+      // start OAuth 
+      redirect_to_oauth(res, redirect)
+    } else {
+      cb(null, accesstoken)
+    }
+
+  }
+
+  getAccessToken(endpoint, req, res, function (err, accesstoken) {
+    if (err) {
+        res.writeHead(500, {'Content-Type': 'text/plain'})
+        res.end(err.toString())
+        return
+    }
+    pipeApi(endpoint, accesstoken, res)
+  })
+}
+
+function renderTransactions (req, res){
+  render("/transactions", req, res)
+}
+function renderAccounts (req, res){
+  render("/accounts", req, res)
+}
+
+//
+// retrieve the 'code' parameter from the redirect url the
+// OAuth Authorization returns to the user's browser
+//
+function handleOAuthCallback(req, res) {
+  var u      = url.parse(req.url)
+  var query  = querystring.parse(u.query)
+  var code   = query["code"]
+  var target = query["ep"]
+
+  if (code && target) {
+    retrieve_access_token_from_code( code, target, function (err, token) {
+      if (err) {
+        res.writeHead(500, {'Content-Type': 'text/plain'})
+        res.end(err.toString())
+        return
+      }
+      createSession(res, token)
+      res.writeHead(307, {"location" : target})
+      res.end()
+    }) 
+  } else {
+    res.writeHead(500, {'Content-Type': 'text/plain'})
+    res.end("missing code or target")
+  } 
+
+}
+
+function listener (request, response) {
+  var u = url.parse(request.url)
+  
+  if (request.method !== "GET") {
     response.writeHead(403, "Forbidden")
     response.end()
     return
   }
-  var code = querystring.parse(u.query)["code"]
-  if (code) {
-    retrieve_access_token_from_code( code, function (err, token) {
-      if (err) {}
-      renderWelcome(request, response, token)
-    }) 
-  } else {
-    // we don't have an oauth `code` yet, so we need to
-		// redirect the user to the OAuth provider to get one ...
-    redirect_to_oauth(response)
-    return
+
+  switch(u.pathname) {
+    case "/":
+      renderWelcome(request, response)
+    break
+    case "/transactions":
+      renderTransactions(request, response)
+    break
+    case "/accounts":
+      renderAccounts(request, response)
+      break
+    case "/oauth":
+      handleOAuthCallback(request, response)
+    break
+    default:
+      response.writeHead(404, "Not Found")
   }
+
 }
 
 // Execution starts here...
@@ -145,8 +341,7 @@ var hello_template = ""+
 "</head>"+
 "<body>"+
 "	<h1>Welcome!</h1>"+
-"	<i>retrieved <tt>access_token</tt>: {token} </i>"+
-"	<p><a href='{api_uri}/transactions?access_token={token}'>Transactions</a></p>"+
-"	<p><a href='{api_uri}/accounts?access_token={token}'>Accounts</a></p>"+
+"	<p><a href='/transactions'>Transactions</a></p>"+
+"	<p><a href='/accounts'>Accounts</a></p>"+
 "</body>"+
 "</html>"
