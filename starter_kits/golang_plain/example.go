@@ -34,7 +34,7 @@ type Config struct {
 	FidorOauthUrl string // OAuth endpoint (this changes between Sandbox and Production)
 }
 
-const fidorConfig = Config{
+var fidorConfig = Config{
 	AppUrl:        "<APP_URL>",
 	ClientId:      "<CLIENT_ID>",
 	ClientSecret:  "<CLIENT_SECRET>",
@@ -75,6 +75,8 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		render("/accounts", w, r)
 	case "/oauth":
 		handleOAuthCallback(w, r)
+	case "/logout":
+		handleLogout(w, r, "/")
 	default:
 		w.WriteHeader(404)
 	}
@@ -82,8 +84,10 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 
 const COOKIE_NAME = "GO_SESSION"
 
+// session database, available access_tokens are mapped to their cookie-session keys
 var sessions = make(map[string]string)
 
+// stores a retireved access_token both on the server and the reference in a client-side cookie.
 func createSession(w http.ResponseWriter, accessToken string) {
 	println(accessToken)
 	rnd := make([]byte, 20, 20)
@@ -97,12 +101,15 @@ func createSession(w http.ResponseWriter, accessToken string) {
 	http.SetCookie(w, &cookie)
 }
 
+// proxies an API endpoint. In case the client is not logged in (i.e. no
+// session cookie is set), the OAuth procedure is initiated. Once the
+// client is logged, a call the the `endpoint` API endpoint is made and
+// the results (including errors) are piped to the client.
 func render(endpoint string, w http.ResponseWriter, r *http.Request) {
 	// check if request has cookie set
 	if cookie, err := r.Cookie(COOKIE_NAME); err != nil {
 		// else redirect to OAuth Authorization EP
 		redirectToOAuth(w, r, endpoint)
-		return
 	} else {
 		session := cookie.Value
 		accessToken := sessions[session]
@@ -112,7 +119,6 @@ func render(endpoint string, w http.ResponseWriter, r *http.Request) {
 		if api_req, err := http.NewRequest("GET", ep, nil); err != nil {
 			w.WriteHeader(500)
 			w.Write([]byte(err.Error()))
-			return
 		} else {
 			api_req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", accessToken))
 
@@ -120,9 +126,11 @@ func render(endpoint string, w http.ResponseWriter, r *http.Request) {
 			if api_resp, err := client.Do(api_req); err != nil {
 				w.WriteHeader(500)
 				w.Write([]byte(err.Error()))
-				return
 			} else {
-
+				if api_resp.StatusCode == 400 { // token probably expired
+					handleLogout(w, r, endpoint)
+					return
+				}
 				contentType := http.CanonicalHeaderKey("content-type")
 				w.Header().Set(contentType, api_resp.Header.Get(contentType))
 				w.WriteHeader(api_resp.StatusCode)
@@ -132,6 +140,9 @@ func render(endpoint string, w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// client browser is redirected to `authorize` oauth endpoints. The
+// `target_endpoint` parameter indicates which application endpoint to
+// redirect the client to once the access_token has been retrieved.
 func redirectToOAuth(w http.ResponseWriter, r *http.Request, target_endpoint string) {
 	_redirectURI := fmt.Sprintf("%s/oauth?ep=%s", fidorConfig.AppUrl, target_endpoint)
 	redirectURI := url.QueryEscape(_redirectURI)
@@ -140,6 +151,8 @@ func redirectToOAuth(w http.ResponseWriter, r *http.Request, target_endpoint str
 	http.Redirect(w, r, oauthRedirectURL, 307)
 }
 
+// handles the oauth callback (i.e. the redirect that the oauth
+// authorize call "returns" to the client)
 func handleOAuthCallback(w http.ResponseWriter, r *http.Request) {
 	code := r.FormValue("code")
 	target := r.FormValue("ep")
@@ -157,38 +170,31 @@ func handleOAuthCallback(w http.ResponseWriter, r *http.Request) {
 	} else {
 		createSession(w, token)
 		http.Redirect(w, r, target, 307)
-
 	}
-
 }
 
-//	// check whether we have a GET parameter named `code`, if so,
-//	// this is a redirect back from the Fidor OAuth server.
-//	values := r.URL.Query()
-//	if values["code"] != nil {
-//		// retrieve the actual OAuth access token ....
-//		code := values.Get("code")
-//		if token, err := retrieveTokenFromCode(code); err != nil {
-//			fmt.Printf("err: %v\n", err)
-//			w.WriteHeader(500)
-//			fmt.Fprintf(w, "Unfortunately, an error occurred retrieving oauth token")
-//		} else {
-//			// ... and finally, greet the user and assemble links
-//			renderWelcome(w, token)
-//		}
-//	} else {
-//		// we don't have an oauth `code` yet, so we need to
-//		// redirect the user to the OAuth provider to get one ...
-//		oauth_url := fmt.Sprintf("%s/authorize?client_id=%s&state=123&response_type=code&redirect_uri=%s",
-//			fidor_oauth_url,
-//			client_id,
-//			url.QueryEscape(oauth_cb_url))
-//
-//		header := w.Header()
-//		header.Add("location", oauth_url)
-//		w.WriteHeader(307)
-//	}
-//}
+// clear our application's session, forces user to call the oauth
+// authorize endpoint again. This may or may not force the user to have
+// to reenter credentials, depending on whether the user's Fidor session
+// has expired.
+func handleLogout(w http.ResponseWriter, r *http.Request, endpoint string) {
+	if cookie, err := r.Cookie(COOKIE_NAME); err == nil {
+		// we have a cookie
+
+		// remove it from our stored sessions
+		session := cookie.Value
+		delete(sessions, session)
+
+		// kill the cookie on the client
+		cookie := http.Cookie{
+			Name:   COOKIE_NAME,
+			Value:  "",
+			MaxAge: -1,
+		}
+		http.SetCookie(w, &cookie)
+	}
+	http.Redirect(w, r, endpoint, 307)
+}
 
 // Our TokenResponse representation used to pick it out from the JSON
 // returned by the OAuth server.
@@ -197,7 +203,10 @@ type TokenResponse struct {
 }
 
 // Use the OAuth code that the user's browser picked up from the OAuth
-// server to request an OAuth access_token to use in API requests.
+// server to request an OAuth access_token to use in API requests. The
+// `target_endpoint` parameter indicates which of this app's endpoints
+// to redirect the client to once we have the access_token and stored a
+// reference in the client's cookie.
 func retrieveTokenFromCode(code string, target_endpoint string) (token string, err error) {
 	// assemble the API endpoint URL and request payload
 	redirect_uri := fmt.Sprintf("%s/oauth?ep=%s", fidorConfig.AppUrl, target_endpoint)
@@ -208,7 +217,7 @@ func retrieveTokenFromCode(code string, target_endpoint string) (token string, e
 		"redirect_uri":  {url.QueryEscape(redirect_uri)},
 		"grant_type":    {"authorization_code"},
 	}
-	// Call API
+	// Call the Oauth `token` endpoint
 	tokenUrl := fmt.Sprintf("%s/token", fidorConfig.FidorOauthUrl)
 	if resp, err := http.PostForm(tokenUrl, tokenPayload); err != nil {
 		println(err)
@@ -240,6 +249,7 @@ var indexTemplate = `
 	<h1>Welcome!</h1>
 	<p><a href="/transactions">Transactions</a></p>
 	<p><a href="/accounts">Accounts</a></p>
+	<p><a href="/logout">Log Out</a></p>
 </body>
 </html>
 `
