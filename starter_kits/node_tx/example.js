@@ -30,22 +30,23 @@ var fidor_config = {
 }
 
 
-
-
 /************************************************************************
 /* BEGIN: OAuth Calls
 ************************************************************************/
+
+//
 // redirect the user to the OAuth authorization endpoint with the
 // following params:
 //   - client_id
 //   - state
 //   - response_type
 //   - redirect_uri
+//
 function redirect_to_oauth(response, target_endpoint){
-  var oauth_uri = fidor_config.app_url+"/oauth?ep="+target_endpoint
-  var redirect_uri = encodeURIComponent(oauth_uri)
+  var _redirect_uri = fidor_config.app_url+"/oauth?ep="+target_endpoint
+  var redirect_uri = encodeURIComponent(_redirect_uri)
   var oauth_url = fidor_config.fidor_oauth_url+
-                  "/oauth/authorize?client_id="+fidor_config.client_id+
+                  "/authorize?client_id="+fidor_config.client_id+
                   "&state=123&response_type=code&"+
                   "redirect_uri="+redirect_uri
   response.writeHead(307, {"location" : oauth_url})
@@ -74,7 +75,7 @@ function retrieve_access_token_from_code( code, target_endpoint, cb ) {
   // where to send the data ...
   var postOptions = {
     method: "POST",
-    path  : oauth_url.path+"/oauth/token",
+    path  : oauth_url.path+"/token",
     port  : oauth_url.port,
     host  : oauth_url.hostname
   }
@@ -128,7 +129,6 @@ var sessions = {}
 // retrieve the random session_id from the cookie.
 function getSession(req) {
   var cookies = req.headers.cookie
-  console.log(cookies)
   var session = null
   if (cookies) {
     var cookieArr = cookies.split(";")
@@ -137,16 +137,13 @@ function getSession(req) {
       if (keyValue && keyValue.length == 2 && keyValue[0].trim() == COOKIE_NAME) {
         session = keyValue[1]
         break
-      } else {
-        console.log(keyValue[0])
-      }
+      } 
     }
   }
   return session
 }
 function getAccessTokenFromSession(req) {
   var session = getSession(req)
-  console.log("Session: "+session)
   var access_token = null
   if (session) {
     access_token = sessions[session]
@@ -166,7 +163,7 @@ function createSession(resp, access_token) {
   sessions[rnd] = access_token
   resp.setHeader("Set-Cookie", COOKIE_NAME+"="+rnd)
 }
-function removeSessions(req, resp) {
+function removeSession(req, resp) {
   // find cookie
   var session = getSession(req)
   // delete from sessions
@@ -214,6 +211,10 @@ function render (endpoint, req, res) {
 
     var api_request = http_module.request(http_options, function(api_response) {
       res.setHeader('Content-Type', api_response.headers['content-type'])
+      if (api_response.statusCode == 400) { // access_token has expired.
+        handleLogout(req, res, endpoint)
+        return
+      }
       res.writeHead(api_response.statusCode, api_response.statusMessage)
       api_response.on('data', function(chunk) {
         res.write(chunk)
@@ -287,7 +288,13 @@ function handleOAuthCallback(req, res) {
     res.writeHead(500, {'Content-Type': 'text/plain'})
     res.end("missing code or target")
   } 
+}
 
+function handleLogout(req, res, endpoint) {
+  // clear session locally and in browser
+  removeSession(req, res)
+  res.writeHead(307, {"location" : endpoint})
+  res.end()
 }
 
 function listener (request, response) {
@@ -311,6 +318,9 @@ function listener (request, response) {
       break
     case "/oauth":
       handleOAuthCallback(request, response)
+    break
+    case "/logout":
+      handleLogout(request, response, "/")
     break
     default:
       response.writeHead(404, "Not Found")
@@ -343,5 +353,6 @@ var hello_template = ""+
 "	<h1>Welcome!</h1>"+
 "	<p><a href='/transactions'>Transactions</a></p>"+
 "	<p><a href='/accounts'>Accounts</a></p>"+
+"	<p><a href='/logout'>Log Out</a></p>"+
 "</body>"+
 "</html>"
