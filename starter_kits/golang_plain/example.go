@@ -127,7 +127,7 @@ func render(endpoint string, w http.ResponseWriter, r *http.Request) {
 				w.WriteHeader(500)
 				w.Write([]byte(err.Error()))
 			} else {
-				if api_resp.StatusCode == 400 { // token probably expired
+				if api_resp.StatusCode == 401 { // token probably expired
 					handleLogout(w, r, endpoint)
 					return
 				}

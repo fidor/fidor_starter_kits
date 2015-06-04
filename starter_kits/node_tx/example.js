@@ -211,7 +211,7 @@ function render (endpoint, req, res) {
 
     var api_request = http_module.request(http_options, function(api_response) {
       res.setHeader('Content-Type', api_response.headers['content-type'])
-      if (api_response.statusCode == 400) { // access_token has expired.
+      if (api_response.statusCode == 401) { // access_token has expired.
         handleLogout(req, res, endpoint)
         return
       }
