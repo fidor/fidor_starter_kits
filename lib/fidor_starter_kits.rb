@@ -6,7 +6,7 @@ require 'json'
 
 module FidorStarterKits
 
-  STARTER_KITS = %w{ node_tx golang_plain php_plain sinatra_plain java_servlet }
+  STARTER_KITS = %w{ node_tx golang_plain php_plain ruby_oauth_plain java_servlet }
 
   class << self
 
@@ -70,7 +70,7 @@ module FidorStarterKits
         if File.exists? meta
           File.open(meta) {|f| @conf[kit] = JSON.parse(f.read)}
         else
-          @conf[kit] = "meh"   
+          @conf[kit] = {"error" => ".fidor_meta.json not found"}
         end
       end
       return @conf
@@ -80,8 +80,8 @@ module FidorStarterKits
       all[app_name]
     end
 
-    def each 
-      all.each_value { |conf| yield conf } 
+    def each
+      all.each_value { |conf| yield conf }
     end
 
   end

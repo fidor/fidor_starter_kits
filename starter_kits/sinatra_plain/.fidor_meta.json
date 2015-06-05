@@ -1,7 +1,0 @@
-{
-  "display_name" : "Ruby Sinatra Plain",
-  "description"  : "A simple Sinatra based app, showing how to get an access token.",
-  "app_name":"sinatra_plain",
-  "app_url":"http://localhost:4567",
-  "callback_urls":"http://localhost:4567"
-}

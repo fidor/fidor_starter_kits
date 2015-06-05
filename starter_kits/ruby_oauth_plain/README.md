@@ -1,13 +1,13 @@
 # Ruby Plain oAuth Login - Example
 
 A single view that demonstrates the Fidor API OAuth login flow and how to get 
-an access token.
+an access token. Uses Sinatra on its server side.
 
 ## Usage
 
 This uses bundler to install the required gems:
 
-  cd sinatra_plain
+  cd ruby_oauth_plain
   bundle install
   ruby example.rb
   

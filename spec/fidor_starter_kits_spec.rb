@@ -4,10 +4,10 @@ describe FidorStarterKits do
 
   describe '.exists?' do
     it 'is true' do
-      expect( FidorStarterKits.exists?('sinatra_plain') ).to be
+      expect( FidorStarterKits.exists?('ruby_oauth_plain') ).to be
     end
     it 'is false' do
-      expect( FidorStarterKits.exists?('sinatra_plain') ).to be
+      expect( FidorStarterKits.exists?('ruby_oauth_plain') ).to be
     end
   end
 
@@ -21,7 +21,7 @@ describe FidorStarterKits do
 
     it 'creates zip file' do
       opts = {
-        app_name: 'sinatra_plain',
+        app_name: 'ruby_oauth_plain',
         client_id: '123',
         client_secret: '12345',
         app_url: 'localhost'
@@ -32,7 +32,7 @@ describe FidorStarterKits do
 
     it 'replaces placeholders in example.rb' do
       opts = {
-        app_name: 'sinatra_plain',
+        app_name: 'ruby_oauth_plain',
         client_id: 'my-client-id',
         client_secret: 'my-client-secret',
         app_url: 'my-app-url',
@@ -49,7 +49,7 @@ describe FidorStarterKits do
     end
   end
 
-  describe '.all' do 
+  describe '.all' do
     it 'lists all starter kits' do
       expect(FidorStarterKits.all.count).to eq(FidorStarterKits::STARTER_KITS.size)
     end
@@ -59,7 +59,7 @@ describe FidorStarterKits do
       expect(conf["golang_plain"]["display_name"]).to eq("Go Plain")
       expect(conf["node_tx"]["description"]).to eq("A simple nodejs based app, showing how to get user transactions")
       expect(conf["php_plain"]["app_name"]).to eq("php_plain")
-      expect(conf["sinatra_plain"]["app_url"]).to eq("http://localhost:4567")
+      expect(conf["ruby_oauth_plain"]["app_url"]).to eq("http://localhost:4567")
       expect(conf["java_servlet"]["callback_urls"]).to eq("http://localhost:8080/JavaServlet/Example")
     end
   end
