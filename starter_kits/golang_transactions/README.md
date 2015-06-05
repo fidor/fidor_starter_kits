@@ -1,8 +1,8 @@
-# Basic Go Example
+# Golang GET Transactions
 
 This is a basic example project that demonstrates the Fidor API OAuth
-flow. It provides the same functionality as the php example if you would
-like to compare the two sample projects.
+flow, saving access-tokens to a session and grabbing transactions and account 
+details.
 
 ## Usage
 

@@ -30,8 +30,8 @@ type Config struct {
 	AppUrl        string // where to reach this application
 	ClientId      string // OAuth Client_id parameter
 	ClientSecret  string // OAuth Client_secret parameter
-	FidorApiUrl   string // API endpoint (this changes between Sandbox and Production)
-	FidorOauthUrl string // OAuth endpoint (this changes between Sandbox and Production)
+	FidorApiUrl   string // API endpoint e.g Sandbox: https://aps.fidor.de/oauth / Live: https://apm.fidor.de/oauth
+	FidorOauthUrl string // OAuth endpoint e.g Sandbox: https://aps.fidor.de / Live: https://api.fidor.de
 }
 
 var fidorConfig = Config{
@@ -87,7 +87,7 @@ const COOKIE_NAME = "GO_SESSION"
 // session database, available access_tokens are mapped to their cookie-session keys
 var sessions = make(map[string]string)
 
-// stores a retireved access_token both on the server and the reference in a client-side cookie.
+// stores a retrieved access_token both on the server and the reference in a client-side cookie.
 func createSession(w http.ResponseWriter, accessToken string) {
 	println(accessToken)
 	rnd := make([]byte, 20, 20)
@@ -180,7 +180,6 @@ func handleOAuthCallback(w http.ResponseWriter, r *http.Request) {
 func handleLogout(w http.ResponseWriter, r *http.Request, endpoint string) {
 	if cookie, err := r.Cookie(COOKIE_NAME); err == nil {
 		// we have a cookie
-
 		// remove it from our stored sessions
 		session := cookie.Value
 		delete(sessions, session)

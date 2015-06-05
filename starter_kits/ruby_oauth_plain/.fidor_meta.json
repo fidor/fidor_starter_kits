@@ -1,7 +1,8 @@
 {
   "display_name" : "Ruby oAuth Plain",
-  "description"  : "A simple Ruby app showing the oAuth dance to get and use the access token. Uses Sinatra as server.",
+  "description"  : "Ruby app doing the oAuth login to get and use the access token. Uses Sinatra as server.",
   "app_name":"ruby_oauth_plain",
   "app_url":"http://localhost:4567",
-  "callback_urls":"http://localhost:4567"
+  "callback_urls":"http://localhost:4567",
+  "language" : "ruby"
 }

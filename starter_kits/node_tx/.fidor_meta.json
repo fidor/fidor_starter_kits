@@ -1,7 +1,8 @@
 {
-  "display_name" : "Node Transactions",
-  "description"  : "A simple nodejs based app, showing how to get user transactions",
+  "display_name" : "NodeJS Transactions",
+  "description"  : "NodeJS app getting transactions and accounts. Handling oAuth login.",
   "app_name":"node_tx",
   "app_url":"http://localhost:3141",
-  "callback_urls":"http://localhost:3141"
+  "callback_urls":"http://localhost:3141",
+  "language" : "nodejs"
 }

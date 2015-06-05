@@ -1,7 +1,8 @@
 {
   "display_name" : "PHP oAuth Plain",
-  "description"  : "A simple php script, showing how to get the access token",
+  "description"  : "PHP script getting the access token",
   "app_name":"php_oauth_plain",
   "app_url":"http://localhost:8000/example.php",
-  "callback_urls":"http://localhost:8000/example.php"
+  "callback_urls":"http://localhost:8000/example.php",
+  "language" : "php"
 }
