@@ -58,7 +58,7 @@ describe FidorStarterKits do
       conf = FidorStarterKits.all
       expect(conf["golang_plain"]["display_name"]).to eq("Go Plain")
       expect(conf["node_tx"]["description"]).to eq("A simple nodejs based app, showing how to get user transactions")
-      expect(conf["php_plain"]["app_name"]).to eq("php_plain")
+      expect(conf["php_oauth_plain"]["app_name"]).to eq("php_oauth_plain")
       expect(conf["ruby_oauth_plain"]["app_url"]).to eq("http://localhost:4567")
       expect(conf["java_servlet"]["callback_urls"]).to eq("http://localhost:8080/JavaServlet/Example")
     end

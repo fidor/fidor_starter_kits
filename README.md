@@ -11,7 +11,6 @@ information into the source files and delivers the example as zipped download.
 If you choose the manual way to explore our example apps, simply checkout this
 repo, register and app and add the required credentials, URL's to the sources.
 
-
 For Ruby Heros, this repo is also available as ruby gem and provides a tiny
 helper for app creation, see Install & Usage.
 
@@ -57,18 +56,18 @@ application manager. Before the following placeholders inside in your main
 example.xy file are substituted with the according values from the app
 (client_id/secret) and the values in .fidor_meta.json:
 
-    <APP_URL>                   # default http://localhost:8000/example.php
+    <APP_URL>          # default http://localhost:8000/example.php
     <CLIENT_ID>
     <CLIENT_SECRET>
-    <FIDOR_OAUTH_URL>           # e.g https://fidor.com/oauth
-    <FIDOR_API_URL>
+    <FIDOR_OAUTH_URL>  # e.g Sandbox: https://aps.fidor.de/oauth / Live: https://apm.fidor.de/oauth
+    <FIDOR_API_URL>    # e.g Sandbox: https://aps.fidor.de / Live: https://api.fidor.de
 
 So just add those to example.[rb, php, ..] and see existing examples and specs
 for a reference.
 
 ## Contributing
 
-1. Fork it ( http://github.com/schorsch/fidor_starter_kits/fork )
+1. Fork it (https://github.com/fidor/fidor_starter_kits/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
