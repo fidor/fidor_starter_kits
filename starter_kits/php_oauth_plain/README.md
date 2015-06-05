@@ -1,4 +1,4 @@
-# Plain PHP Login - Example
+# Plain PHP oAuth Example
 
 A single view that demonstrates the Fidor API OAuth login flow and how to get 
 an access token.

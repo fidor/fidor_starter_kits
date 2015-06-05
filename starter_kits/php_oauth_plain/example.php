@@ -1,12 +1,13 @@
 <?php
 
-  $app_url = "<APP_URL>";                   # default http://localhost:8000/example.php
-  $app_id = "<CLIENT_ID>";
-  $app_secret = "<CLIENT_SECRET>";
-  $fidor_oauth_url = "<FIDOR_OAUTH_URL>";   # e.g https://fidor.com/api_sandbox/oauth
-  $fidor_api_url = "<FIDOR_API_URL>";       # e.g https://fidor.com/api_sandbox vs /api
+$app_url        = "<APP_URL>";           # default http://localhost:8000/example.php
+$app_id         = "<CLIENT_ID>";
+$app_secret     = "<CLIENT_SECRET>";
+$fidor_oauth_url= "<FIDOR_OAUTH_URL>";   # e.g Sandbox: https://aps.fidor.de/oauth / Live: https://apm.fidor.de/oauth
+$fidor_api_url  = "<FIDOR_API_URL>";     # e.g Sandbox: https://aps.fidor.de / Live: https://api.fidor.de
 
-  $code = $_REQUEST["code"];
+
+$code = $_REQUEST["code"];
 
   # 1. redirect to authorize url
   if(empty($code)) {
@@ -38,15 +39,13 @@
   $context  = stream_context_create($options);
   $resp = json_decode(file_get_contents($token_url, false, $context));
 
-  # 3. GET Data e.g.info about current user
-  $usr_url = $fidor_api_url . "/users/current?access_token=" . $resp->access_token;
-  $user = json_decode(file_get_contents($usr_url));
-  $transactions_url = $fidor_api_url . "/transactions?access_token=" . $resp->access_token;
-  echo( "<h2>Hello " . $user->email . "</h2>
+  echo( "<h2>Hello</h2>
          <i>May I present the access token response:</i>
          <blockquote>");
    print_r($resp);
    echo("</blockquote>
-        <p>Now use the access token here: <br> <a href='" . $transactions_url . "'>".$transactions_url."</a></p>");
+        <p>Now use the access token in the request header in your favorite PHP HTTP method or via CURL: </p>
+        <blockquote>curl -v -H \"Authorization: Bearer ".$resp->access_token."\" ".$fidor_api_url."/transactions
+        </blockquote>");
 
 ?>
