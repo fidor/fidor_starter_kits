@@ -45,7 +45,7 @@ $code = $_REQUEST["code"];
    print_r($resp);
    echo("</blockquote>
         <p>Now use the access token in the request header in your favorite PHP HTTP method or via CURL: </p>
-        <blockquote>curl -v -H \"Authorization: Bearer ".$resp->access_token."\" ".$fidor_api_url."/transactions
+        <blockquote>curl -v -H \"Authorization: Bearer ".$resp->access_token."\" -H \"Accept: application/vnd.fidor.de; version=1,text/json\" ".$fidor_api_url."/transactions
         </blockquote>");
 
 ?>
