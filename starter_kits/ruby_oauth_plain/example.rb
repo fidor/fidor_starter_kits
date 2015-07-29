@@ -24,7 +24,7 @@ get '/' do
                   #client_secret: @client_secret,
                   grant_type: 'authorization_code' }
   auth = {:username => @client_id, :password => @client_secret}
-  resp = HTTParty.post(token_url, body: post_params, basic_auth: {} )
+  resp = HTTParty.post(token_url, body: post_params, basic_auth: auth )
 
   # GET current user setting the access-token in the request header
   user = HTTParty.get( "#{@fidor_api_url}/users/current",
