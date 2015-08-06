@@ -21,13 +21,15 @@ get '/' do
   post_params = { client_id: @client_id,
                   redirect_uri: CGI::escape(@app_url),
                   code: code,
-                  client_secret: @client_secret,
+                  #client_secret: @client_secret,
                   grant_type: 'authorization_code' }
-  resp = HTTParty.post(token_url, body: post_params )
+  auth = {:username => @client_id, :password => @client_secret}
+  resp = HTTParty.post(token_url, body: post_params, basic_auth: auth )
 
   # GET current user setting the access-token in the request header
   user = HTTParty.get( "#{@fidor_api_url}/users/current",
-                       headers: { 'Authorization' => "Bearer #{resp['access_token']}"} )
+                       headers: { 'Authorization' => "Bearer #{resp['access_token']}",
+                                  'Accept'        => "application/vnd.fidor.de; version=1,text/json"} )
 
   "<h2>Hello #{user['email']}</h2>
    <i>May i present the access token response:</i>

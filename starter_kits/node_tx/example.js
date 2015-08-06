@@ -77,7 +77,8 @@ function retrieve_access_token_from_code( code, target_endpoint, cb ) {
     method: "POST",
     path  : oauth_url.path+"/token",
     port  : oauth_url.port,
-    host  : oauth_url.hostname
+    host  : oauth_url.hostname,
+    auth  : fidor_config.client_id+":"+fidor_config.client_secret
   }
 
   // ... what to send
@@ -85,7 +86,7 @@ function retrieve_access_token_from_code( code, target_endpoint, cb ) {
   var postData = {
     code          : code,
     client_id     : fidor_config.client_id,
-    client_secret : fidor_config.client_secret,
+    // client_secret : fidor_config.client_secret, // deprecated, please use basic auth, see. postOptions, above
     redirect_uri  : encodeURIComponent(redirect_uri),
     grant_type    : "authorization_code"
   }
@@ -205,7 +206,8 @@ function render (endpoint, req, res) {
       port: api_endpoint.port,
       method: "GET",
       headers: {
-        "Authorization": "Bearer "+access_token
+        "Authorization": "Bearer "+access_token,
+        "Accept": "application/vnd.fidor.de; version=1,text/json"
       }
     }
 

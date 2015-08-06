@@ -121,6 +121,7 @@ func render(endpoint string, w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte(err.Error()))
 		} else {
 			api_req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", accessToken))
+			api_req.Header.Set("Accept", "application/vnd.fidor.de; version=1,text/json")
 
 			client := &http.Client{}
 			if api_resp, err := client.Do(api_req); err != nil {
@@ -210,15 +211,18 @@ func retrieveTokenFromCode(code string, target_endpoint string) (token string, e
 	// assemble the API endpoint URL and request payload
 	redirect_uri := fmt.Sprintf("%s/oauth?ep=%s", fidorConfig.AppUrl, target_endpoint)
 	tokenPayload := url.Values{
-		"client_id":     {fidorConfig.ClientId},
-		"client_secret": {fidorConfig.ClientSecret},
-		"code":          {code},
-		"redirect_uri":  {url.QueryEscape(redirect_uri)},
-		"grant_type":    {"authorization_code"},
+		"client_id": {fidorConfig.ClientId},
+		//"client_secret": {fidorConfig.ClientSecret},
+		"code":         {code},
+		"redirect_uri": {url.QueryEscape(redirect_uri)},
+		"grant_type":   {"authorization_code"},
 	}
 	// Call the Oauth `token` endpoint
 	tokenUrl := fmt.Sprintf("%s/token", fidorConfig.FidorOauthUrl)
-	if resp, err := http.PostForm(tokenUrl, tokenPayload); err != nil {
+	req, _ := http.NewRequest("POST", tokenUrl, strings.NewReader(tokenPayload.Encode()))
+	req.SetBasicAuth(fidorConfig.ClientId, fidorConfig.ClientSecret)
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	if resp, err := http.DefaultClient.Do(req); err != nil {
 		println(err)
 		return "", err
 	} else {
