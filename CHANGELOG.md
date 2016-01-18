@@ -1,6 +1,10 @@
 # Changelog Fidor Admin API Schema
 See [commit messages](https://github.com/fidor/fidor_starter_kits/commits/) for details.
 
+##2016-01
+
+* deprecate client_secret in params => moved to header
+
 ##2015-06
 
 * fix usage of access_token in api URLs, now set in Authorization Header

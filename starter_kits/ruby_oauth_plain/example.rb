@@ -21,7 +21,7 @@ get '/' do
   post_params = { client_id: @client_id,
                   redirect_uri: CGI::escape(@app_url),
                   code: code,
-                  #client_secret: @client_secret,
+                  #client_secret: @client_secret, #deprecated used in Basic Auth header
                   grant_type: 'authorization_code' }
   auth = {:username => @client_id, :password => @client_secret}
   resp = HTTParty.post(token_url, body: post_params, basic_auth: auth )
