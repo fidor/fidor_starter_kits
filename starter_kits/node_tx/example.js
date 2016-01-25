@@ -86,7 +86,6 @@ function retrieve_access_token_from_code( code, target_endpoint, cb ) {
   var postData = {
     code          : code,
     client_id     : fidor_config.client_id,
-    // client_secret : fidor_config.client_secret, // deprecated, please use basic auth, see. postOptions, above
     redirect_uri  : encodeURIComponent(redirect_uri),
     grant_type    : "authorization_code"
   }

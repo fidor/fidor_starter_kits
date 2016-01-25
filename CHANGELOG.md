@@ -3,7 +3,7 @@ See [commit messages](https://github.com/fidor/fidor_starter_kits/commits/) for 
 
 ##2016-01
 
-* deprecate client_secret in params => moved to header
+* remove client_secret usage in params => moved to BasicAuth header
 
 ##2015-06
 

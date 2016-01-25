@@ -212,7 +212,6 @@ func retrieveTokenFromCode(code string, target_endpoint string) (token string, e
 	redirect_uri := fmt.Sprintf("%s/oauth?ep=%s", fidorConfig.AppUrl, target_endpoint)
 	tokenPayload := url.Values{
 		"client_id": {fidorConfig.ClientId},
-		//"client_secret": {fidorConfig.ClientSecret},
 		"code":         {code},
 		"redirect_uri": {url.QueryEscape(redirect_uri)},
 		"grant_type":   {"authorization_code"},
