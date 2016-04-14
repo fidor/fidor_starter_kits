@@ -34,7 +34,12 @@ get '/' do
    <i>May i present the access token response:</i>
    <blockquote>#{resp.body}</blockquote>
    <p>Now use the access token in the Header of your Requests, e.g. using CURL</p>
+   <h3>GET /accounts</h3>
    <blockquote>
-   curl -v -H \"Authorization: Bearer #{resp['access_token']}\" #{@fidor_api_url}/accounts
-   </blockquote>"
+   curl -v --header \"Accept: application/vnd.fidor.de; version=1,text/json\" --header \"Authorization: Bearer #{resp['access_token']}\" #{@fidor_api_url}/accounts
+   </blockquote>
+  <h3>GET /transactions</h3>
+  <blockquote>
+   curl -v --header \"Accept: application/vnd.fidor.de; version=1,text/json\" --header \"Authorization: Bearer #{resp['access_token']}\" #{@fidor_api_url}/transactions?per_page=5
+  </blockquote>"
 end
