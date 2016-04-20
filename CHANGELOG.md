@@ -1,6 +1,10 @@
 # Changelog Fidor Admin API Schema
 See [commit messages](https://github.com/fidor/fidor_starter_kits/commits/) for details.
 
+##2016-04
+
+* add PHP advanced example
+
 ##2016-01
 
 * remove client_secret usage in params => moved to BasicAuth header

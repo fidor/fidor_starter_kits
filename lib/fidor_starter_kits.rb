@@ -6,7 +6,7 @@ require 'json'
 
 module FidorStarterKits
 
-  STARTER_KITS = %w{ node_tx golang_transactions php_oauth_plain ruby_oauth_plain java_servlet }
+  STARTER_KITS = %w{ node_tx golang_transactions php_oauth_plain ruby_oauth_plain java_servlet php_advanced }
 
   class << self
 
