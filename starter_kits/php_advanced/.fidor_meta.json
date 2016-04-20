@@ -1,0 +1,8 @@
+{
+  "display_name" : "PHP Advanced",
+  "description"  : "PHP Website using multiple API objects and a tiny PHP SDK",
+  "app_name":"php_advanced",
+  "app_url":"http://localhost:8000",
+  "callback_urls":"http://localhost:8000",
+  "language" : "php"
+}
