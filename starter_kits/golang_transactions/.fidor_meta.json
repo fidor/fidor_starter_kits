@@ -1,6 +1,7 @@
 {
   "display_name" : "Go Transactions",
   "description"  : "Golang app getting transactions & accounts and handling oAuth based logins.",
+  "description-de"  : "Golang  App für Transaktionen und Abruf von Kontodaten, Handhabung mit dem OAuth-Token",
   "app_name":"golang_transactions",
   "app_url":"http://localhost:8080",
   "callback_urls":"http://localhost:8080",
