@@ -1,7 +1,7 @@
 {
   "display_name" : "NodeJS Transactions",
   "description"  : "NodeJS app getting transactions and accounts. Handling oAuth login.",
-  "description-de"  : "NodeJS App für Transaktionen und Abruf von Kontodaten, Handhabung mit dem OAuth-Token"
+  "description-de"  : "NodeJS App für Transaktionen und Abruf von Kontodaten, Handhabung mit dem OAuth-Token",
   "app_name":"node_tx",
   "app_url":"http://localhost:3141",
   "callback_urls":"http://localhost:3141",

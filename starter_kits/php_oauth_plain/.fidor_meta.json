@@ -1,7 +1,7 @@
 {
   "display_name" : "PHP oAuth Plain",
   "description"  : "PHP script getting the access token",
-  "description-de"  : "PHP Skript um ein OAuth Access-Token zu erhalten"
+  "description-de"  : "PHP Skript um ein OAuth Access-Token zu erhalten",
   "app_name":"php_oauth_plain",
   "app_url":"http://localhost:8000/example.php",
   "callback_urls":"http://localhost:8000/example.php",

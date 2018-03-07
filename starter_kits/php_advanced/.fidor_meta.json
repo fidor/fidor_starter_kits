@@ -1,7 +1,7 @@
 {
   "display_name" : "PHP Advanced",
   "description"  : "PHP Website using multiple API objects and a tiny PHP SDK",
-  "description-de"  : "PHP Website die viele API Funktionen nutzt und ein kleines SDK enthält"
+  "description-de"  : "PHP Website die viele API Funktionen nutzt und ein kleines SDK enthält",
   "app_name":"php_advanced",
   "app_url":"http://localhost:8000",
   "callback_urls":"http://localhost:8000",
