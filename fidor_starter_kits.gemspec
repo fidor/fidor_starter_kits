@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["connect@fidor.com"]
   spec.summary       = %q{BETA - Starter Kits for building fidor apps.}
   spec.description   = %q{Fidor application examples for different languages. They rely on the BETA Version of the API so things may change.}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/fidor/fidor_starter_kits"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
@@ -18,9 +18,9 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
-  spec.add_runtime_dependency "rubyzip"
-  spec.add_development_dependency "bundler", "~> 1.16"
-  spec.add_development_dependency "rake"
-  spec.add_development_dependency 'rspec'
-  spec.add_development_dependency 'byebug'
+  spec.add_runtime_dependency 'rubyzip', '~> 1.2'
+  spec.add_development_dependency 'bundler', '~> 1.16'
+  spec.add_development_dependency 'rake', '~> 12.3'
+  spec.add_development_dependency 'rspec', '~> 3.7'
+  spec.add_development_dependency 'byebug', '~> 10.0'
 end
