@@ -1,0 +1,48 @@
+{
+  "name": "Fidor API Demo",
+  "description": "This application demonstrates the capabilities of Fidor Bank API powered by the `fidor_api` ruby library.",
+  "repository": "https://github.com/fidor/fidor_api_demo",
+  "keywords": ["fidor", "api", "demo", "rails"],
+  "env": {
+    "FIDOR_API_CALLBACK": {
+      "description": "The customer is redirected back to this URL during the oAuth flow",
+      "value": "<APP_URL>/auth/callback"
+    },
+    "FIDOR_API_CLIENT_ID": {
+      "description": "The unique ID assigned to your application by fidor",
+      "value": "<CLIENT_ID>"
+    },
+    "FIDOR_API_CLIENT_SECRET": {
+      "description": "The secret assigned to your application by fidor",
+      "value": "<CLIENT_SECRET>"
+    },
+    "FIDOR_API_LOGGING": {
+      "description": "Whether the `fidor_api` gem should log all requests done against the Fidor API",
+      "value": "true"
+    },
+    "FIDOR_API_URL": {
+      "description": "The API endpoint which the `fidor_api` gem should use for regular requests",
+      "value": "<FIDOR_API_URL>"
+    },
+    "FIDOR_OAUTH_URL": {
+      "description": "The API endpoint which the `fidor_api` gem should use for oAuth requests",
+      "value": "<FIDOR_OAUTH_URL>"
+    },
+    "RAILS_ENV": {
+      "description": "Runs the rails application in production mode",
+      "value": "production"
+    },
+    "RAILS_LOG_TO_STDOUT": {
+      "description": "Tells rails to log to STDOUT instead of a local logfile",
+      "value": "true"
+    },
+    "RAILS_SERVE_STATIC_FILES": {
+      "description": "Tells rails to service static files by the application server",
+      "value": "true"
+    },
+    "SECRET_KEY_BASE": {
+      "description": "A secret key used for different encryptions and checksums in rails",
+      "generator": "secret"
+    }
+  }
+}

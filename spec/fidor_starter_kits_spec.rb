@@ -56,6 +56,7 @@ describe FidorStarterKits do
 
     it 'loads the json meta data' do
       conf = FidorStarterKits.all
+      expect(conf["ruby_on_rails_api_demo"]["display_name"]).to eq("Ruby on Rails Fidor API Demo Application")
       expect(conf["golang_transactions"]["display_name"]).to eq("Go Transactions")
       expect(conf["node_tx"]["description"]).to eq("NodeJS app getting transactions and accounts. Handling oAuth login.")
       expect(conf["php_oauth_plain"]["app_name"]).to eq("php_oauth_plain")

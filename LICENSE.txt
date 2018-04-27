@@ -1,4 +1,4 @@
-Copyright (c) 2014 Georg Leciejewski
+Copyright (c) 2018 Fidor Solutions AG
 
 MIT License
 

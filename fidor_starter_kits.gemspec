@@ -6,8 +6,8 @@ require 'fidor_starter_kits/version'
 Gem::Specification.new do |spec|
   spec.name          = "fidor_starter_kits"
   spec.version       = FidorStarterKits::VERSION
-  spec.authors       = ["Georg Leciejewski"]
-  spec.email         = ["dev@fidor.de"]
+  spec.authors       = ["Fidor Solutions AG"]
+  spec.email         = ["connect@fidor.com"]
   spec.summary       = %q{BETA - Starter Kits for building fidor apps.}
   spec.description   = %q{Fidor application examples for different languages. They rely on the BETA Version of the API so things may change.}
   spec.homepage      = ""
@@ -19,7 +19,8 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_runtime_dependency "rubyzip"
-  spec.add_development_dependency "bundler", "~> 1.5"
+  spec.add_development_dependency "bundler", "~> 1.16"
   spec.add_development_dependency "rake"
   spec.add_development_dependency 'rspec'
+  spec.add_development_dependency 'byebug'
 end

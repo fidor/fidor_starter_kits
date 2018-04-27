@@ -1,0 +1,9 @@
+{
+  "display_name" : "Ruby on Rails Fidor API Demo Application",
+  "description" : "Demo Application for the `fidor_api` gem",
+  "description-de" : "Demo Application for the `fidor_api` gem",
+  "app_name": "ruby_on_rails_api_demo",
+  "app_url": "http://localhost:4000",
+  "callback_urls": "http://localhost:4000/auth/callback",
+  "language" : "ruby"
+}
