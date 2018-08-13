@@ -3,8 +3,8 @@
 $app_url        = "<APP_URL>";           # default http://localhost:8000/example.php
 $app_id         = "<CLIENT_ID>";
 $app_secret     = "<CLIENT_SECRET>";
-$fidor_oauth_url= "<FIDOR_OAUTH_URL>";   # e.g Sandbox: https://aps.fidor.de/oauth / Live: https://apm.fidor.de/oauth
-$fidor_api_url  = "<FIDOR_API_URL>";     # e.g Sandbox: https://aps.fidor.de / Live: https://api.fidor.de
+$fidor_oauth_url= "<FIDOR_OAUTH_URL>";   # e.g Sandbox: https://apm.sandbox.fidor.com/oauth / Live: https://apm.fidor.de/oauth
+$fidor_api_url  = "<FIDOR_API_URL>";     # e.g Sandbox: https://api.sandbox.fidor.com / Live: https://api.fidor.de
 
 $code = $_REQUEST["code"];
 

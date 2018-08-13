@@ -59,8 +59,8 @@ example.xy file are substituted with the according values from the app
     <APP_URL>          # default http://localhost:8000/example.php
     <CLIENT_ID>
     <CLIENT_SECRET>
-    <FIDOR_OAUTH_URL>  # e.g Sandbox: https://aps.fidor.de/oauth / Live: https://apm.fidor.de/oauth
-    <FIDOR_API_URL>    # e.g Sandbox: https://aps.fidor.de / Live: https://api.fidor.de
+    <FIDOR_OAUTH_URL>  # e.g Sandbox: https://apm.sandbox.fidor.com/oauth / Live: https://apm.fidor.de/oauth
+    <FIDOR_API_URL>    # e.g Sandbox: https://api.sandbox.fidor.com / Live: https://api.fidor.de
 
 So just add those to example.[rb, php, ..] and see existing examples and specs
 for a reference.

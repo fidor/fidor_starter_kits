@@ -30,8 +30,8 @@ type Config struct {
 	AppUrl        string // where to reach this application
 	ClientId      string // OAuth Client_id parameter
 	ClientSecret  string // OAuth Client_secret parameter
-	FidorApiUrl   string // API endpoint e.g Sandbox: https://aps.fidor.de/oauth / Live: https://apm.fidor.de/oauth
-	FidorOauthUrl string // OAuth endpoint e.g Sandbox: https://aps.fidor.de / Live: https://api.fidor.de
+	FidorApiUrl   string // API endpoint e.g Sandbox: https://api.sandbox.fidor.com / Live: https://apm.fidor.de
+	FidorOauthUrl string // OAuth endpoint e.g Sandbox: https://apm.sandbox.fidor.com/oauth / Live: https://api.fidor.de/oauth
 }
 
 var fidorConfig = Config{

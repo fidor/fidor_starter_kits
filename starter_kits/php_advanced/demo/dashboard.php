@@ -79,13 +79,13 @@ if ( ! empty( $accounts['message'] ) ) {
 
         <p>
             Congratulation, here’s your access-token, I will use it for all theAPI calls: <strong><?php echo $_SESSION['oauth']['access_token']; ?></strong>. <br />
-            It will expire on <strong><?php echo gmdate( 'r', ( $_SESSION['oauth']['auth_at']+$_SESSION['oauth']['expires_in'] ) ); ?></strong>. <br /><br />
-            The refresh-token is <strong><?php echo $_SESSION['oauth']['refresh_token']; ?></strong>. You can use it to request a new access-token.
+            It will expire on <strong><?php echo gmdate( 'r', ( $_SESSION['oauth']['auth_at']+$_SESSION['oauth']['expires_in'] ) ); ?></strong>.<br /><br />
+            The refresh-token is <strong><?php echo $_SESSION['oauth']['refresh_token']; ?></strong>. You can use it to request anew access-token.
         </p>
 
         <h2>Data access</h2>
         <p>
-            Cool, I have access to this account (GET aps.fidor.de/accounts):
+            Cool, I have access to this account (GET api.sandbox.fidor.com/accounts):
         </p>
 
         <?php

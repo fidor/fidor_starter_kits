@@ -7,8 +7,8 @@ get '/' do
   @app_url         = '<APP_URL>'          # default for local installs: http://localhost:4567
   @client_id       = '<CLIENT_ID>'
   @client_secret   = '<CLIENT_SECRET>'
-  @fidor_oauth_url = '<FIDOR_OAUTH_URL>'  # e.g Sandbox: https://aps.fidor.de/oauth / Live: https://apm.fidor.de/oauth
-  @fidor_api_url   = '<FIDOR_API_URL>'    # e.g Sandbox: https://aps.fidor.de / Live: https://api.fidor.de
+  @fidor_oauth_url = '<FIDOR_OAUTH_URL>'  # e.g Sandbox: https://apm.sandbox.fidor.com/oauth / Live: https://apm.fidor.de/oauth
+  @fidor_api_url   = '<FIDOR_API_URL>'    # e.g Sandbox: https://api.sandbox.fidor.com / Live: https://api.fidor.de
 
   # 1. redirect to authorize url
   unless code = params["code"]
@@ -32,14 +32,14 @@ get '/' do
 
   "<h2>Hello #{user['email']}</h2>
    <i>May i present the access token response:</i>
-   <blockquote>#{resp.body}</blockquote>
+   <pre><code>#{resp.body}</code></pre>
    <p>Now use the access token in the Header of your Requests, e.g. using CURL</p>
    <h3>GET /accounts</h3>
-   <blockquote>
+   <pre><code>
    curl -v --header \"Accept: application/vnd.fidor.de; version=1,text/json\" --header \"Authorization: Bearer #{resp['access_token']}\" #{@fidor_api_url}/accounts
-   </blockquote>
-  <h3>GET /transactions</h3>
-  <blockquote>
+   </code></pre>
+   <h3>GET /transactions</h3>
+   <pre><code>
    curl -v --header \"Accept: application/vnd.fidor.de; version=1,text/json\" --header \"Authorization: Bearer #{resp['access_token']}\" #{@fidor_api_url}/transactions?per_page=5
-  </blockquote>"
+   </code></pre>"
 end
